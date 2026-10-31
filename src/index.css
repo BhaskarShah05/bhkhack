@@ -386,3 +386,27 @@ body.spline-loading header {
 
 
 
+
+/* Wave text animation effect */
+@property --wave-text-offset {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: -25;
+}
+
+@keyframes wave-text {
+  0% {
+    --wave-text-offset: -35;
+  }
+  100% {
+    --wave-text-offset: 135;
+  }
+}
+
+.animate-wave-text,
+.motion-safe\:animate-wave-text {
+  animation-name: wave-text;
+  animation-timing-function: ease-in-out;
+  animation-duration: 3.75s;
+  animation-iteration-count: infinite;
+}

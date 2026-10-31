@@ -48,8 +48,6 @@ const imgGroup = `${assetPathPrefix}/c8616.svg`;
 const imgVector = `${assetPathPrefix}/fb331.svg`;
 const imgVector1 = `${assetPathPrefix}/575e3.svg`;
 const imgLinkedinIcon1 = `${assetPathPrefix}/31930.svg`;
-const imgVector2 = `${assetPathPrefix}/cbf28.svg`;
-const imgVector9 = `${assetPathPrefix}/ac2ff.svg`;
 
 export default function Team() {
   return (
@@ -1249,24 +1247,8 @@ export default function Team() {
                       </div>
                     </div>
                   </div>
-                  <div className="col-1 flex h-[181.81px] items-center justify-center ml-0 mt-0 relative row-1 w-[141.953px]" data-node-id="1:331">
-                    <div className="flex-none rotate-[-43.66deg] scale-y-97 skew-x-[-12.9deg]">
-                      <div className="h-[124.86px] relative w-[107.942px]" data-name="Vector">
-                        <div className="absolute inset-[0_-1.78%_-3.08%_-1.78%]">
-                          <img alt="" className="block max-w-none size-full" src={imgVector2} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-1 flex h-[179.737px] items-center justify-center ml-[973px] mt-[196.25px] relative row-1 w-[143.591px]" data-node-id="1:332">
-                    <div className="-scale-y-97 flex-none rotate-[-59.24deg] skew-x-[-12.9deg]">
-                      <div className="h-[117.124px] relative w-[115.071px]" data-name="Vector">
-                        <div className="absolute inset-[0_-1.67%_-3.28%_-1.67%]">
-                          <img alt="" className="block max-w-none size-full" src={imgVector9} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  
+                  
                 </div>
                 <div className="[word-break:break-word] font-['SF_Pro:Regular'] font-normal min-w-full not-italic relative shrink-0 text-[0px] text-center text-white tracking-[-1.92px] w-[min-content]" data-node-id="1:333" style={{ fontVariationSettings: '"wdth" 100' }}>
                   <p className="font-['Satoshi',Arial,sans-serif] font-medium leading-[60px] mb-0 text-[48px]">Designing, Coding, And Tomorrow’s Innovations Today.</p>

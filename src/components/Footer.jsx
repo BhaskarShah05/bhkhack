@@ -11,8 +11,6 @@ const imgInstagram = `${assetPathPrefix}/42741.svg`
 const imgLinkedin = `${assetPathPrefix}/linkedin-icon.svg`
 const imgGithub = `${assetPathPrefix}/github-icon.svg`
 const imgFacebook = `${assetPathPrefix}/facebook-icon.svg`
-const imgSphereLeafLeft = `${assetPathPrefix}/cbf28.svg`
-const imgSphereLeafRight = `${assetPathPrefix}/ac2ff.svg`
 
 // SVG Liquid Glass Filter Component
 const GlassFilter = () => (
@@ -278,13 +276,6 @@ export default function Footer({ hideParticleLogo = false }) {
 
       {/* 3. Interactive Team Image Sphere */}
       <div className="relative mt-[10px] sm:mt-[20px] w-full max-w-[1200px] flex items-center justify-center z-30 overflow-hidden">
-        <div className="hidden sm:block absolute left-2 md:left-10 top-1/2 -translate-y-1/2 z-30 pointer-events-none w-[70px] h-[70px] sm:w-[130px] sm:h-[130px] md:w-[170px] md:h-[170px]">
-          <img
-            src={imgSphereLeafLeft}
-            alt=""
-            className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]"
-          />
-        </div>
         <div className="relative z-20 flex justify-center items-center py-2 sm:py-4 w-full max-w-full overflow-hidden">
           <SphereImageGrid
             images={SPHERE_TEAM_MEMBERS}
@@ -298,13 +289,6 @@ export default function Footer({ hideParticleLogo = false }) {
             perspective={1000}
             autoRotate={true}
             autoRotateSpeed={0.25}
-          />
-        </div>
-        <div className="hidden sm:block absolute right-2 md:right-10 top-1/2 -translate-y-1/2 z-30 pointer-events-none w-[70px] h-[70px] sm:w-[130px] sm:h-[130px] md:w-[170px] md:h-[170px]">
-          <img
-            src={imgSphereLeafRight}
-            alt=""
-            className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(236,72,153,0.6)]"
           />
         </div>
       </div>

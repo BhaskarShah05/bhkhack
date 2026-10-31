@@ -11,6 +11,7 @@ const imgPranjal = publicAsset("change_people/pranjal.png");
 const imgSanskar = publicAsset("change_people/sanskar.png");
 const imgShreyansh = publicAsset("change_people/shreyansh pandey.png");
 const imgVishnu = publicAsset("change_people/vishnu.png");
+const imgAditya = publicAsset("change_people/aditya.png");
 
 const assetPathPrefix = "/assets";
 const imgRectangle31 = `${assetPathPrefix}/13843.png`;
@@ -62,8 +63,6 @@ const imgGroup = `${assetPathPrefix}/c8616.svg`;
 const imgVector = `${assetPathPrefix}/fb331.svg`;
 const imgVector1 = `${assetPathPrefix}/575e3.svg`;
 const imgLinkedinIcon1 = `${assetPathPrefix}/31930.svg`;
-const imgVector2 = `${assetPathPrefix}/cbf28.svg`;
-const imgVector9 = `${assetPathPrefix}/ac2ff.svg`;
 
 export default function Team() {
   return (
@@ -155,10 +154,9 @@ export default function Team() {
   socialLinks={["https://www.linkedin.com/in/kuldeepchaudhary108/","https://github.com/Kuldeepchaudhary108/"]}
   bio="~wanted die with memories not with dreams"
 />
-                  <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-[651px] mt-[192px] place-items-start relative row-1" data-node-id="1:65">
-                    
 <TeamMemberCard
-  className="col-1 h-[600px] ml-0 mt-0 relative row-1 w-[200px] group cursor-pointer"
+  className="col-1 h-[600px] ml-[651px] mt-[192px] relative row-1 w-[200px] group cursor-pointer"
+  expandDirection="left"
   dataNodeId="1:66"
   image={imgPranjal}
   color="#feb9ce"
@@ -169,7 +167,6 @@ export default function Team() {
   imgClasses="w-full h-auto object-top pointer-events-none"
   socialLinks={["https://www.linkedin.com/in/pranjal-gupta-766898323","https://github.com/PranjalGupta280","https://x.com/TechnoVerse007c"]}
 />
-                  </div>
                 </div>
                 <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:72">
                   
@@ -420,13 +417,13 @@ export default function Team() {
 <TeamMemberCard
   className="col-1 h-[600px] ml-0 mt-[179px] relative row-1 w-[200px] group cursor-pointer"
   dataNodeId="1:192"
-  image={imgRectangle54}
+  image={imgAditya}
   color="#6663ff"
   word="DEVELOP"
   nameParts={["Aditya","Kumar"]}
   designation="Developer"
-  photoClasses="-translate-x-1/2 absolute h-[472px] left-[calc(50%-0.5px)] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)] top-[25px] w-[305px] profile-img-bottom-shadow transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-  imgClasses="absolute inset-0 max-w-none object-bottom pointer-events-none size-full"
+  photoClasses="left-1/2 -translate-x-1/2 absolute w-[200px] h-[480px] top-[38px] profile-img-bottom-shadow"
+  imgClasses="w-full h-full object-contain pointer-events-none"
   linkedinUrl="https://www.linkedin.com/in/aditya-kumar-42861a332/"
   bio="Curious by nature, always building and experimenting. Love tech, good conversations, and late-night ideas. Here to learn, create, and enjoy the journey."
 />
@@ -508,10 +505,9 @@ export default function Team() {
   linkedinUrl="https://www.linkedin.com/in/aanya-gogia-585478332/"
   bio="A tech enthusiast who enjoys coding, competitive programming, and trying out new things. Always learning, building, and having fun along the way."
 />
-                  <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-[869px] mt-0 place-items-start relative row-1" data-node-id="1:231">
-                    
 <TeamMemberCard
-  className="col-1 h-[600px] ml-0 mt-0 relative row-1 w-[200px] group cursor-pointer"
+  className="col-1 h-[600px] ml-[869px] mt-0 relative row-1 w-[200px] group cursor-pointer"
+  expandDirection="left"
   dataNodeId="1:232"
   image={imgRectangle60}
   color="#feb9ce"
@@ -523,7 +519,6 @@ export default function Team() {
   linkedinUrl="https://www.linkedin.com/in/sidhi-saxena-885478332/"
   bio="A curious mind, a passionate programmer, and a dancer at heart. I love solving problems, exploring new ideas, and bringing positive energy wherever I go."
 />
-                  </div>
                 </div>
                 <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:238">
                   

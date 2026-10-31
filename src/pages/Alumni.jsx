@@ -177,7 +177,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle32} />
 
                     <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%-8.88px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[14px] w-[394px] profile-img-bottom-shadow"
@@ -225,7 +225,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle33} />
 
                       <div className="-translate-x-1/2 absolute h-[455px] left-[calc(50%-37.94px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[123.88px] w-[305px] profile-img-bottom-shadow"
@@ -358,7 +358,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle36} />
 
                     <div className="-translate-x-1/2 absolute h-[595px] left-[calc(50%-20.84px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[22.88px] w-[400px] profile-img-bottom-shadow"
@@ -451,7 +451,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle38} />
 
                     <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%+29px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-0 w-[394px] profile-img-bottom-shadow"
@@ -496,7 +496,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle39} />
 
                     <div className="-translate-x-1/2 absolute h-[528px] left-[calc(50%-0.42px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[-5.12px] w-[327px] profile-img-bottom-shadow"
@@ -695,7 +695,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle43} />
 
                       <div className="-translate-x-1/2 absolute h-[540px] left-[calc(50%+48.62px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[101px] w-[363px] profile-img-bottom-shadow"
@@ -743,7 +743,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle44} />
 
                         <div className="-translate-x-1/2 absolute h-[455px] left-[calc(50%+33.06px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[33.88px] w-[305px] profile-img-bottom-shadow"
@@ -876,7 +876,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle47} />
 
                       <div className="-translate-x-1/2 absolute h-[595px] left-[calc(50%-20.84px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[22.88px] w-[400px] profile-img-bottom-shadow"
@@ -971,7 +971,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle49} />
 
                       <div className="-translate-x-1/2 absolute h-[629px] left-[calc(50%-11.38px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[-45px] w-[423px] profile-img-bottom-shadow"
@@ -1019,7 +1019,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle50} />
 
                         <div className="-translate-x-1/2 absolute h-[455px] left-[calc(50%+11.06px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[88.88px] w-[305px] profile-img-bottom-shadow"
@@ -1201,7 +1201,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle54} />
 
                       <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%-14.88px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[75px] w-[394px] profile-img-bottom-shadow"
@@ -1249,7 +1249,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle55} />
 
                         <div className="-translate-x-1/2 absolute h-[455px] left-[calc(50%-51.94px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[123.88px] w-[305px] profile-img-bottom-shadow"
@@ -1391,7 +1391,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle58} />
 
                         <div className="-translate-x-1/2 absolute h-[600px] left-1/2 shadow-[10.161px_10.161px_10.161px_0px_rgba(0,0,0,0.25)] top-[-41px] w-[372px] profile-img-bottom-shadow"
@@ -1586,7 +1586,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle62} />
 
                       <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%+0.08px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[-0.12px] w-[394px] profile-img-bottom-shadow"
@@ -1629,7 +1629,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle63} />
 
                       <div className="-translate-x-1/2 absolute h-[528px] left-[calc(50%-0.42px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[-5.12px] w-[327px] profile-img-bottom-shadow"
@@ -1810,7 +1810,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle67} />
 
                       <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%+24px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[41px] w-[394px] profile-img-bottom-shadow"
@@ -1854,7 +1854,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle68} />
 
                       <div className="-translate-x-1/2 absolute h-[528px] left-[calc(50%-0.42px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[-5.12px] w-[327px] profile-img-bottom-shadow"
@@ -2049,7 +2049,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle72} />
 
                     <div className="-translate-x-1/2 absolute h-[467px] left-[calc(50%+23.62px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[65.88px] w-[314px] profile-img-bottom-shadow"
@@ -2097,7 +2097,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle73} />
 
                       <div className="-translate-x-1/2 absolute h-[455px] left-[calc(50%+16.56px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[33.76px] w-[305px] profile-img-bottom-shadow"
@@ -2230,7 +2230,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle76} />
 
                     <div className="-translate-x-1/2 absolute h-[595px] left-[calc(50%-21.34px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[-14.24px] w-[400px] profile-img-bottom-shadow"
@@ -2323,7 +2323,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle78} />
 
                     <div className="-translate-x-1/2 absolute h-[423px] left-[calc(50%-53.88px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[48px] w-[284px] profile-img-bottom-shadow"
@@ -2371,7 +2371,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle79} />
 
                       <div className="-translate-x-1/2 absolute h-[455px] left-[calc(50%+0.06px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[33.88px] w-[305px] profile-img-bottom-shadow"
@@ -2504,7 +2504,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle82} />
 
                     <div className="-translate-x-1/2 absolute h-[507px] left-[calc(50%+50.66px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[20.88px] w-[341px] profile-img-bottom-shadow"
@@ -2615,7 +2615,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle84} />
 
                       <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%+22.16px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[-0.48px] w-[394px] profile-img-bottom-shadow"
@@ -2659,7 +2659,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle85} />
 
                       <div className="-translate-x-1/2 absolute h-[542px] left-[calc(50%+5.16px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[-31.48px] w-[336px] profile-img-bottom-shadow"
@@ -2841,7 +2841,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#cbd5d4" />
+                    <ProfileCardBackdrop color="#b3fd44" />
                     <ProfileCardGhostOverlay src={imgRectangle89} />
 
                       <div className="-translate-x-1/2 absolute h-[586px] left-[calc(50%+15.16px)] shadow-[3.6px_3.6px_3.6px_0px_rgba(0,0,0,0.25)] top-[28.52px] w-[394px] profile-img-bottom-shadow"
@@ -2885,7 +2885,7 @@ export default function Alumni({ activePage = "Alumni", onNavigate }) {
   <div className="relative h-full w-full">
     <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
 
-                    <ProfileCardBackdrop color="#e4dcd2" />
+                    <ProfileCardBackdrop color="#6663ff" />
                     <ProfileCardGhostOverlay src={imgRectangle90} />
 
                       <div className="-translate-x-1/2 absolute h-[528px] left-[calc(50%+0.66px)] shadow-[4.32px_4.32px_4.32px_0px_rgba(0,0,0,0.25)] top-[35.52px] w-[327px] profile-img-bottom-shadow"

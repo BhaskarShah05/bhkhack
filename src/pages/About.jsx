@@ -2,10 +2,13 @@ import React, { useEffect } from "react"
 import GsapBigTextHero from "../components/about/GsapBigTextHero"
 import GsapHorizontalShowcase from "../components/about/GsapHorizontalShowcase"
 import TeamMembersMarquee from "../components/about/TeamMembersMarquee"
+import Footer from "../components/Footer"
 
 export default function About({ activePage = "About" }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" })
+    document.body.style.overflow = ""
+    document.body.classList.remove("spline-loading")
   }, [])
 
   return (
@@ -22,6 +25,9 @@ export default function About({ activePage = "About" }) {
 
       {/* 3. Creative Team Members Marquee Section */}
       <TeamMembersMarquee />
+
+      {/* 4. Let's Connect & Rotating People Footer */}
+      <Footer />
     </div>
   )
 }

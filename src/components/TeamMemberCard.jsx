@@ -110,59 +110,80 @@ export default function TeamMemberCard({
 
   const cardRef = React.useRef(null);
 
-  // Determine default expansion direction:
-  // Cards on the left columns (ml-0 or ml < 360px, such as ~217px) must expand to the right so they don't clip off the left screen edge.
-  // Cards on the right columns (ml >= 700px, such as ~868px, ~1085px) must expand to the left.
+  // Static fallback based on className or explicit prop:
+  // Cards in columns < 500px (ml-0, ml-[217px], ml-[434px]) expand right.
+  // Cards in columns >= 500px (ml-[651px], ml-[868px], ml-[1085px]) expand left.
   const staticDir = React.useMemo(() => {
     if (expandDirection) return expandDirection;
-    if (/\bml-0\b|\bml-\[0(?:px)?\]/.test(className)) return "right";
     const mlMatch = className.match(/\bml-\[([\d.]+)px\]/);
     if (mlMatch) {
       const ml = parseFloat(mlMatch[1]);
-      if (ml < 360) return "right";
+      if (ml < 500) return "right";
       return "left";
     }
-    return "left";
+    return "right";
   }, [className, expandDirection]);
 
   const [expandDir, setExpandDir] = React.useState(staticDir);
+  const [isHovered, setIsHovered] = React.useState(false);
 
-  React.useEffect(() => {
-    setExpandDir(staticDir);
-  }, [staticDir]);
-
-  // Viewport-aware collision detection on hover:
-  // Dynamically flips direction if expanding in the current direction would overflow the window viewport.
-  const handleMouseEnter = () => {
+  // Dynamic viewport-aware collision detection:
+  // Ensures cards never overflow the browser viewport horizontally regardless of screen size or zoom.
+  const updateDirection = React.useCallback(() => {
+    if (expandDirection) {
+      setExpandDir(expandDirection);
+      return;
+    }
     if (cardRef.current) {
       const rect = cardRef.current.getBoundingClientRect();
       const spaceOnLeft = rect.left;
       const spaceOnRight = window.innerWidth - rect.right;
 
-      // 360px needed for the expansion wing
-      if (spaceOnLeft < 360 && spaceOnRight >= 360) {
+      // 370px needed for the expansion wing
+      if (spaceOnLeft < 370) {
         setExpandDir("right");
-      } else if (spaceOnRight < 360 && spaceOnLeft >= 360) {
-        setExpandDir("left");
-      } else if (spaceOnLeft < 360 && spaceOnRight < 360) {
-        setExpandDir(spaceOnRight > spaceOnLeft ? "right" : "left");
+        return;
       }
+      if (spaceOnRight < 370) {
+        setExpandDir("left");
+        return;
+      }
+
+      // If both sides have space, expand toward the center of the viewport
+      const cardCenter = rect.left + rect.width / 2;
+      setExpandDir(cardCenter < window.innerWidth / 2 ? "right" : "left");
     }
-  };
+  }, [expandDirection]);
+
+  React.useEffect(() => {
+    updateDirection();
+    window.addEventListener("resize", updateDirection);
+    return () => window.removeEventListener("resize", updateDirection);
+  }, [updateDirection]);
 
   return (
     <div
       ref={cardRef}
-      onMouseEnter={handleMouseEnter}
-      className={`col-1 h-[600px] relative row-1 w-[200px] group cursor-pointer ${className}`}
+      className={`col-1 h-[600px] relative row-1 w-[200px] ${isHovered ? "z-[100]" : "z-10"} ${className}`}
       data-node-id={dataNodeId}
     >
       <div className="relative h-full w-full">
         {/* ========================================================
             1. BASE PILL (200px x 600px, rounded-[300px])
-            The profile photo inside stays pinned at exact size, shape & position.
+            Hover is ONLY counted on this non-expanded base pill!
+            Leaving this 200x600 pill closes the expanded card immediately.
         ======================================================== */}
-        <div className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px]">
+        <div
+          onMouseEnter={() => {
+            updateDirection();
+            setIsHovered(true);
+          }}
+          onMouseMove={updateDirection}
+          onMouseLeave={() => {
+            setIsHovered(false);
+          }}
+          className="absolute inset-0 bg-black border border-white/10 overflow-clip rounded-[300px] z-30 cursor-pointer pointer-events-auto"
+        >
           <ProfileCardBackdrop color={color} word={word} />
           <ProfileCardGhostOverlay src={image} />
 
@@ -181,7 +202,11 @@ export default function TeamMemberCard({
           />
 
           {/* Member Name & Designation (Desktop: fades out on card hover; Mobile: always visible) */}
-          <div className="absolute inset-0 transition-opacity duration-300 ease-out md:group-hover:opacity-0 -translate-y-8 md:translate-y-0 pointer-events-none">
+          <div
+            className={`absolute inset-0 transition-all duration-300 ease-out -translate-y-8 md:translate-y-0 pointer-events-none ${
+              isHovered ? "md:opacity-0 md:scale-95" : "md:opacity-100 md:scale-100"
+            }`}
+          >
             <div className="-translate-x-1/2 [word-break:break-word] absolute content-stretch flex flex-col gap-[8px] items-center justify-center left-1/2 not-italic text-center top-[427px] whitespace-nowrap">
               <div className="flex flex-col font-['Satoshi',Arial,sans-serif] font-bold justify-center leading-[0] relative shrink-0 text-[28px] text-white">
                 {displayNameArray.map((part, idx) => (
@@ -194,6 +219,26 @@ export default function TeamMemberCard({
                 {designation}
               </p>
             </div>
+          </div>
+
+          {/* Desktop Hover Links: Appear right where the name was in the non-expanded card */}
+          <div
+            className={`hidden md:flex -translate-x-1/2 absolute left-1/2 top-[440px] items-center justify-center gap-3 z-40 transition-all duration-300 ease-out ${
+              isHovered ? "opacity-100 pointer-events-auto scale-100" : "opacity-0 pointer-events-none scale-90"
+            }`}
+          >
+            {parsedSocials.map((item, idx) => (
+              <a
+                key={idx}
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={item.label}
+                className="size-11 p-2.5 rounded-full bg-white/20 hover:bg-white text-white hover:text-black active:scale-90 transition-all flex items-center justify-center border border-white/40 shadow-[0_4px_20px_rgba(0,0,0,0.9)] backdrop-blur-md hover:scale-115"
+              >
+                <SocialIcon type={item.type} />
+              </a>
+            ))}
           </div>
 
           {/* Mobile Only (md:hidden): Direct Social Links */}
@@ -227,10 +272,12 @@ export default function TeamMemberCard({
             expandDir === "left"
               ? "right-0 flex-row rounded-l-[32px] rounded-r-[100px]"
               : "left-0 flex-row-reverse rounded-l-[100px] rounded-r-[32px]"
-          } w-[560px] h-[600px] bg-[#121214]/95 backdrop-blur-2xl border border-white/15 shadow-[0_28px_70px_rgba(0,0,0,0.95)] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 ease-out z-50`}
+          } w-[560px] h-[600px] bg-[#121214]/95 backdrop-blur-2xl border border-white/15 shadow-[0_28px_70px_rgba(0,0,0,0.95)] ${
+            isHovered ? "opacity-100" : "opacity-0"
+          } pointer-events-none transition-all duration-300 ease-out z-20`}
         >
           {/* Content Column (360px wide) */}
-          <div className="w-[360px] h-full flex flex-col justify-between py-8 px-8 shrink-0 text-left">
+          <div className="w-[360px] h-full flex flex-col justify-between py-10 px-8 shrink-0 text-left">
             {/* Top: Name on top, with Club / Designation below that */}
             <div>
               <p className="font-['Satoshi',Arial,sans-serif] font-bold text-[30px] sm:text-[34px] leading-[1.15] text-white tracking-tight">
@@ -251,42 +298,12 @@ export default function TeamMemberCard({
               </div>
             </div>
 
-            {/* Bottom: Socials with Large Size Icons */}
-            <div className="pt-2">
-              <div className="flex items-center gap-3.5 flex-wrap">
-                {parsedSocials.map((item, idx) => (
-                  <a
-                    key={idx}
-                    href={item.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={item.label}
-                    className="size-12 p-2.5 rounded-full bg-white/10 hover:bg-white/25 hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center border border-white/20 text-white shadow-lg cursor-pointer"
-                  >
-                    <SocialIcon type={item.type} />
-                  </a>
-                ))}
-              </div>
-            </div>
+            {/* Bottom empty spacing - no unnecessary NCS tag text */}
+            <div className="h-4" />
           </div>
 
-          {/* Photo Slot in Expanded Card (Exactly 200px x 600px, rounded-[300px])
-              Aligned pixel-for-pixel over the base pill so the photo does not move, resize, or change shape */}
-          <div className="w-[200px] h-[600px] rounded-[300px] overflow-clip relative bg-black shrink-0 border border-white/10">
-            <ProfileCardBackdrop color={color} word={word} />
-            <div className={cleanPhotoClasses || "-translate-x-1/2 absolute h-[494px] left-1/2 shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)] top-[106px] w-[332px] profile-img-bottom-shadow"}>
-              <img alt={fullName} className={imgClasses} src={image} />
-            </div>
-
-            {/* Bottom gradient vignette (increased opacity & richer contrast when hovered) */}
-            <div
-              className="-translate-x-1/2 absolute h-[290px] left-1/2 rounded-bl-[200px] rounded-br-[200px] top-[310px] w-[200px] pointer-events-none"
-              style={{
-                backgroundImage:
-                  "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.75) 20%, rgba(0, 0, 0, 0.96) 45%, rgb(0, 0, 0) 70%, rgb(0, 0, 0) 100%)",
-              }}
-            />
-          </div>
+          {/* Transparent Spacer (200px x 600px): Keeps 360px wing offset without covering base pill */}
+          <div className="w-[200px] h-[600px] shrink-0 pointer-events-none" />
         </div>
       </div>
     </div>

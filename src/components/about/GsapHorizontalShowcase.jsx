@@ -822,11 +822,14 @@ export default function GsapHorizontalShowcase() {
   // Direct vertical-to-horizontal position synchronizer with hardware accelerated transform
   const syncHorizontalPosition = useCallback(() => {
     if (!outerRef.current || !trackRef.current) return
-    const { totalScrollableDistance, maxHorizontalTranslate, outerTop } = dimsRef.current
+    const rect = outerRef.current.getBoundingClientRect()
+    const stickyHeight = stickyRef.current ? stickyRef.current.offsetHeight : window.innerHeight
+    const totalScrollableDistance = outerRef.current.offsetHeight - stickyHeight
     if (totalScrollableDistance <= 0) return
 
-    const currentScrollOffset = window.scrollY - outerTop
+    const currentScrollOffset = -rect.top
     const rawProgress = Math.max(0, Math.min(1, currentScrollOffset / totalScrollableDistance))
+    const maxHorizontalTranslate = dimsRef.current.maxHorizontalTranslate
     targetXRef.current = -rawProgress * maxHorizontalTranslate
     startLerpLoop()
   }, [startLerpLoop])

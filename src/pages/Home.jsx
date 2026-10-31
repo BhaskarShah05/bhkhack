@@ -6,6 +6,7 @@ import CursorDrivenParticleTypography from "../components/CursorDrivenParticleTy
 import { LiquidMetalButton } from "../components/LiquidMetalButton"
 import CarouselStacked from "../components/ui/carousel-07"
 import { ImageAutoSlider } from "../components/ui/image-auto-slider"
+import WaveText from "../components/ui/WaveText"
 import { highlightImages } from "../data/highlightImages"
 import { publicAsset } from "../lib/publicAsset"
 
@@ -399,25 +400,35 @@ export default function Home({ activePage = "Home", onNavigate }) {
 
             {/* Left Typography & CTA */}
             <div
-              className="flex flex-col gap-6 sm:gap-8 md:gap-[32px] lg:gap-[40px] items-center md:items-start text-center md:text-left relative z-10 w-full md:w-auto md:max-w-[58%] lg:max-w-[55%] xl:max-w-[820px] shrink-0"
+              className="flex flex-col gap-6 sm:gap-7 md:gap-8 items-center text-center relative z-10 w-full md:w-auto md:max-w-[58%] lg:max-w-[56%] xl:max-w-[780px] shrink-0"
               data-node-id="1:39"
             >
-              <div className="flex flex-col not-italic items-center md:items-start relative shrink-0 w-full gap-4 md:gap-6">
-                <div
-                  className="bg-clip-text text-transparent font-['Satoshi',Arial,sans-serif] font-black text-[44px] xs:text-[54px] sm:text-[76px] md:text-[clamp(50px,5.8vw,90px)] lg:text-[clamp(78px,6.8vw,114px)] xl:text-[126px] leading-[1.02] tracking-[-0.04em] w-full select-none text-center md:text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                  data-node-id="1:42"
-                  style={{
-                    backgroundImage: "radial-gradient(50% 50% at 50% 50%, #FFFFFF 33.17%, #999999 100%)",
-                  }}
+              <div className="flex flex-col not-italic items-center text-center relative shrink-0 w-full gap-2 sm:gap-3">
+                {/* 1. NIBBLE */}
+                <WaveText
+                  as="h1"
+                  repeat
+                  base="#ffffff"
+                  shape="radial"
+                  className="mb-0 font-['Satoshi',Arial,sans-serif] font-black text-[34px] xs:text-[42px] sm:text-[56px] md:text-[clamp(44px,4.6vw,66px)] lg:text-[clamp(58px,5.2vw,82px)] xl:text-[88px] leading-[1.05] tracking-[-0.035em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none text-center"
                 >
-                  <p className="mb-0 text-center md:text-left">NIBBLE</p>
-                  <p className="mb-0 text-center md:text-left">COMPUTER</p>
-                  <p className="mb-0 text-center md:text-left">SOCIETY</p>
+                  NIBBLE
+                </WaveText>
+
+                {/* 2. COMPUTER SOCIETY */}
+                <p className="mb-0 text-[#B0B0B8] font-['Satoshi',Arial,sans-serif] font-black text-[27px] xs:text-[34px] sm:text-[45px] md:text-[clamp(34px,3.8vw,54px)] lg:text-[clamp(46px,4.4vw,66px)] xl:text-[72px] leading-[1.05] tracking-[-0.035em] whitespace-nowrap text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
+                  COMPUTER SOCIETY
+                </p>
+
+                {/* 3. Subtitle Description */}
+                <div className="font-['Playfair_Display',Georgia,serif] italic font-normal text-[15px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] leading-[1.45] text-[#82828A] flex flex-col gap-0.5 sm:gap-1 mt-2.5 sm:mt-3 text-center select-none">
+                  <p className="mb-0">A community driven by curiosity, creativity, and innovation.</p>
+                  <p className="mb-0">Turning bold ideas into technology that shapes tomorrow.</p>
                 </div>
               </div>
 
               {/* Join the Community Pill Button with Liquid Metal Shader */}
-              <div className="w-full flex justify-center md:justify-start">
+              <div className="w-full flex justify-center pt-6 sm:pt-8 md:pt-10 lg:pt-12">
                 <LiquidMetalButton
                   label="Join the Community"
                   onClick={() => {

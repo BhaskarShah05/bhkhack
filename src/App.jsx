@@ -40,9 +40,11 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(false)
   const innerRef = useRef(null)
 
-  // Instantly scroll to top on page navigation
+  // Instantly scroll to top on page navigation and ensure scroll is unlocked
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" })
+    document.body.style.overflow = ""
+    document.body.classList.remove("spline-loading")
   }, [page])
 
   // Preload common pages in idle time so transitions are instantaneous
@@ -149,10 +151,10 @@ export default function App() {
           <AnimatePresence mode="sync">
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, filter: "blur(6px)", y: 10 }}
-              animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0 } }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
               className="w-full flex justify-center"
             >
               <Suspense fallback={<div className="w-full min-h-[50vh]" />}>

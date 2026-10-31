@@ -260,33 +260,6 @@ export default function TeamMembersMarquee() {
             ))}
           </Marquee>
         </div>
-
-        {/* Bottom Testimonial Quote */}
-        <div className="mx-auto mt-20 max-w-3xl px-6 text-center lg:px-0">
-          <p className="mb-8 font-medium text-lg text-neutral-900 leading-relaxed md:text-xl dark:text-neutral-200">
-            &ldquo;The exceptional support from Cnippet truly impressed us. We
-            suggested an improvement, and their team implemented it with
-            remarkable speed!&rdquo;
-          </p>
-          <div className="flex flex-col items-center gap-3">
-            <div className="relative h-14 w-14 overflow-hidden rounded-full ring-2 ring-blue-500/30">
-              <Image
-                alt="Natalia Kara"
-                className="h-full w-full object-cover"
-                fill
-                src="https://cdn.21st.dev/assets/mirror/21/2150915ffd93601725345aee4ec87bcdb0f992a8b016d0afba59be5a9b497b5b.jpg"
-              />
-            </div>
-            <div className="text-center">
-              <p className="font-semibold text-neutral-900 dark:text-neutral-100">
-                Natalia Kara
-              </p>
-              <p className="text-neutral-600 text-sm dark:text-neutral-400">
-                CTO &middot; Cnippet Collection
-              </p>
-            </div>
-          </div>
-        </div>
       </section>
     </div>
   )
