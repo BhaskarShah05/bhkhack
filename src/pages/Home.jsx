@@ -165,11 +165,11 @@ export default function Home({ activePage = "Home", onNavigate }) {
               transform: scale(0) !important;
               overflow: hidden !important;
             }
-            @media (max-width: 767px) {
-              canvas {
-                pointer-events: none !important;
-                touch-action: pan-y !important;
-              }
+            #spline,
+            canvas {
+              pointer-events: none !important;
+              touch-action: none !important;
+              user-select: none !important;
             }
           `
           viewer.shadowRoot.appendChild(style)
@@ -199,6 +199,20 @@ export default function Home({ activePage = "Home", onNavigate }) {
 
         if (viewer._spline?.data?.scene?.publish?.settings?.web) {
           viewer._spline.data.scene.publish.settings.web.logo = false
+        }
+
+        if (viewer._spline?.controls?.orbitControls) {
+          viewer._spline.controls.orbitControls.enabled = false
+          viewer._spline.controls.orbitControls.enableRotate = false
+          viewer._spline.controls.orbitControls.enablePan = false
+          viewer._spline.controls.orbitControls.enableZoom = false
+          viewer._spline.controls.orbitControls.autoRotate = false
+        }
+        if (viewer._spline?.eventManager?.publish?.orbitControls) {
+          viewer._spline.eventManager.publish.orbitControls.enableRotate = false
+          viewer._spline.eventManager.publish.orbitControls.enablePan = false
+          viewer._spline.eventManager.publish.orbitControls.enableZoom = false
+          viewer._spline.eventManager.publish.orbitControls.autoRotate = false
         }
 
         // Attach observer to catch any delayed re-injection by Spline
@@ -273,6 +287,14 @@ export default function Home({ activePage = "Home", onNavigate }) {
 
     const handleSplineReady = () => {
       hideSplineWatermark()
+      const v = splineRef.current || document.querySelector("spline-viewer")
+      if (v?._spline?.controls?.orbitControls) {
+        v._spline.controls.orbitControls.enabled = false
+        v._spline.controls.orbitControls.enableRotate = false
+        v._spline.controls.orbitControls.enablePan = false
+        v._spline.controls.orbitControls.enableZoom = false
+        v._spline.controls.orbitControls.autoRotate = false
+      }
       finishLoading()
     }
 
@@ -363,15 +385,15 @@ export default function Home({ activePage = "Home", onNavigate }) {
 
             {/* Desktop View: Full Interactive 3D Spline Scene */}
             <div
-              className="relative z-0 hidden md:flex md:absolute md:right-[-24px] lg:right-[-12px] xl:right-[15px] md:top-1/2 md:-translate-y-1/2 w-[clamp(340px,46vw,816px)] h-[clamp(340px,43vw,725px)] select-none justify-center items-center pointer-events-auto"
+              className="relative z-0 hidden md:flex md:absolute md:right-[-24px] lg:right-[-12px] xl:right-[15px] md:top-1/2 md:-translate-y-1/2 w-[clamp(340px,46vw,816px)] h-[clamp(340px,43vw,725px)] select-none justify-center items-center pointer-events-none"
               data-node-id="1:38"
               data-name="Hero Spline 3D"
             >
               <spline-viewer
                 ref={splineRef}
                 url="https://prod.spline.design/uf2wIxgO0yhwMjDR/scene.splinecode"
-                className="w-full h-full block"
-                style={{ width: "100%", height: "100%" }}
+                className="w-full h-full block pointer-events-none"
+                style={{ width: "100%", height: "100%", pointerEvents: "none" }}
               ></spline-viewer>
             </div>
 

@@ -73,6 +73,7 @@ export default function TeamMemberCard({
   imgClasses = "absolute inset-0 max-w-none object-bottom pointer-events-none size-full",
   className = "",
   dataNodeId,
+  expandDirection,
 }) {
   const allUrls = [
     ...(Array.isArray(socialLinks) ? socialLinks : []),
@@ -107,14 +108,55 @@ export default function TeamMemberCard({
     .replace(/\bease-out\b/g, "")
     .trim();
 
-  // Expansion direction:
-  // If card is on the leftmost edge (ml-0), expand right so it doesn't clip off the left screen edge.
-  // Otherwise, expand to the left (matching the reference image layout: content on left, photo on right).
-  const isLeftmost = /\bml-0\b|\bml-\[0(?:px)?\]/.test(className);
-  const expandDir = isLeftmost ? "right" : "left";
+  const cardRef = React.useRef(null);
+
+  // Determine default expansion direction:
+  // Cards on the left columns (ml-0 or ml < 360px, such as ~217px) must expand to the right so they don't clip off the left screen edge.
+  // Cards on the right columns (ml >= 700px, such as ~868px, ~1085px) must expand to the left.
+  const staticDir = React.useMemo(() => {
+    if (expandDirection) return expandDirection;
+    if (/\bml-0\b|\bml-\[0(?:px)?\]/.test(className)) return "right";
+    const mlMatch = className.match(/\bml-\[([\d.]+)px\]/);
+    if (mlMatch) {
+      const ml = parseFloat(mlMatch[1]);
+      if (ml < 360) return "right";
+      return "left";
+    }
+    return "left";
+  }, [className, expandDirection]);
+
+  const [expandDir, setExpandDir] = React.useState(staticDir);
+
+  React.useEffect(() => {
+    setExpandDir(staticDir);
+  }, [staticDir]);
+
+  // Viewport-aware collision detection on hover:
+  // Dynamically flips direction if expanding in the current direction would overflow the window viewport.
+  const handleMouseEnter = () => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      const spaceOnLeft = rect.left;
+      const spaceOnRight = window.innerWidth - rect.right;
+
+      // 360px needed for the expansion wing
+      if (spaceOnLeft < 360 && spaceOnRight >= 360) {
+        setExpandDir("right");
+      } else if (spaceOnRight < 360 && spaceOnLeft >= 360) {
+        setExpandDir("left");
+      } else if (spaceOnLeft < 360 && spaceOnRight < 360) {
+        setExpandDir(spaceOnRight > spaceOnLeft ? "right" : "left");
+      }
+    }
+  };
 
   return (
-    <div className={`col-1 h-[600px] relative row-1 w-[200px] group cursor-pointer ${className}`} data-node-id={dataNodeId}>
+    <div
+      ref={cardRef}
+      onMouseEnter={handleMouseEnter}
+      className={`col-1 h-[600px] relative row-1 w-[200px] group cursor-pointer ${className}`}
+      data-node-id={dataNodeId}
+    >
       <div className="relative h-full w-full">
         {/* ========================================================
             1. BASE PILL (200px x 600px, rounded-[300px])

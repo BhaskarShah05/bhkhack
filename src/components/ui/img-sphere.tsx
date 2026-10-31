@@ -38,6 +38,7 @@ export interface ImageData {
   src: string;
   alt: string;
   title?: string;
+  designation?: string;
   description?: string;
   fullSrc?: string;
 }
@@ -580,16 +581,16 @@ const SphereImageGrid: React.FC<SphereImageGridProps> = ({
             </button>
           </div>
 
-          {(selectedImage.title || selectedImage.description) && (
+          {(selectedImage.title || selectedImage.description || selectedImage.designation) && (
             <div className="p-3 sm:p-4 w-full text-center bg-[#121214] border-t border-white/10 shrink-0">
               {selectedImage.title && (
                 <h3 className="text-base sm:text-xl font-bold text-white tracking-wide font-['Inter','Satoshi',sans-serif]">
                   {selectedImage.title}
                 </h3>
               )}
-              {selectedImage.description && (
-                <p className="mt-0.5 sm:mt-1 text-gray-400 text-xs sm:text-sm font-normal">
-                  {selectedImage.description}
+              {(selectedImage.designation || selectedImage.description) && (
+                <p className="mt-0.5 sm:mt-1 text-white/75 text-xs sm:text-sm font-medium tracking-wide">
+                  {selectedImage.designation || selectedImage.description}
                 </p>
               )}
             </div>

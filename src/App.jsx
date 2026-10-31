@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, lazy, Suspense } from "react"
 import { Routes, Route, useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import BeamsBackground from "./components/BeamsBackground"
-import ProjectBackground from "./components/ProjectBackground"
 import Navbar from "./components/Navbar"
 
 // Code-split pages with React.lazy so page loads are non-blocking and the navbar never lags
@@ -118,8 +117,8 @@ export default function App() {
 
   return (
     <div className="bg-transparent min-h-screen w-full flex flex-col items-center overflow-x-clip text-white relative">
-      {/* 3D Ethereal Light Beams Background on Home/Team/Alumni, Special 3D Rotating Layers on Project */}
-      {page === "Fan Carousel" ? null : page === "Project" ? <ProjectBackground /> : <BeamsBackground />}
+      {/* 3D Ethereal Light Beams Background across pages */}
+      {page === "Fan Carousel" ? null : <BeamsBackground />}
 
       {/* Sticky/Fixed Navbar Always on Top */}
       <header className="fixed top-0 inset-x-0 z-[100] flex justify-center pt-2 sm:pt-3 md:pt-4 pointer-events-none">
