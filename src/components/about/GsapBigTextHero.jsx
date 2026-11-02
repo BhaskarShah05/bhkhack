@@ -319,28 +319,18 @@ export default function GsapBigTextHero() {
       className="bg-transparent relative w-full min-h-[calc(100vh-84px)] flex flex-col justify-center items-center px-2 sm:px-4 md:px-8 select-none overflow-hidden"
     >
       {/* Main Massive Screen-Covering GSAP Headline Box */}
-      <div className="relative flex flex-col items-start justify-center w-full max-w-[1550px] mx-auto py-2 sm:py-6">
+      <div className="relative flex flex-col items-center justify-center w-full max-w-[1550px] mx-auto py-2 sm:py-6">
 
         {/* ==============================================================
             LINE 1: "What we"
             - 4-Petal Flower crowns the "a"
-            - Massive, screen-filling typography
+            - Massive, screen-filling typography centered
         ============================================================== */}
-        <div className="relative w-full overflow-visible">
-          {/* 4-Petal Gradient Rotating Flower Doodle (Floating directly above "a") */}
-          <div
-            ref={flowerRef}
-            onClick={handleFlowerClick}
-            className="absolute -top-10 sm:-top-16 md:-top-24 lg:-top-32 left-[30%] sm:left-[32%] md:left-[34%] z-30 pointer-events-auto"
-            title="Click flower!"
-          >
-            <GsapFlowerDoodle className="w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-36 lg:h-36" />
-          </div>
-
+        <div className="relative w-full overflow-visible flex justify-center">
           <div className="overflow-hidden py-1">
             <h1
               ref={line1Ref}
-              className="font-['Satoshi'] font-black text-[18vw] sm:text-[17vw] md:text-[16vw] lg:text-[15vw] xl:text-[175px] 2xl:text-[215px] leading-[0.82] tracking-[-0.045em] text-[#faf8f0] uppercase flex items-baseline flex-nowrap"
+              className="font-['Satoshi'] font-black text-[18vw] sm:text-[17vw] md:text-[16vw] lg:text-[15vw] xl:text-[175px] 2xl:text-[215px] leading-[0.82] tracking-[-0.045em] text-[#faf8f0] uppercase flex items-baseline flex-nowrap justify-center"
               style={{
                 fontFamily: "'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif",
                 textShadow: "0 6px 50px rgba(0,0,0,0.5)",
@@ -351,12 +341,22 @@ export default function GsapBigTextHero() {
                 Wh
               </span>
 
-              {/* "a" */}
+              {/* "a" with Flower doodle anchored right above it */}
               <span
                 onMouseEnter={handleCharHover}
                 onMouseLeave={handleCharLeave}
                 className="relative inline-block transition-transform"
               >
+                <div className="absolute -top-[0.62em] left-1/2 -translate-x-1/2 z-30 pointer-events-auto">
+                  <div
+                    ref={flowerRef}
+                    onClick={handleFlowerClick}
+                    className="cursor-pointer"
+                    title="Click flower!"
+                  >
+                    <GsapFlowerDoodle className="w-[0.58em] h-[0.58em]" />
+                  </div>
+                </div>
                 a
               </span>
 
@@ -380,26 +380,15 @@ export default function GsapBigTextHero() {
             LINE 2: "do at NCS?"
             - "do": clean, bold text matching the rest of the text
             - "at": the 't' is REPLACED / FUSED with the Neon-Green Lightning Bolt
-            - "NCS?": the 3D Spring Ribbon coils through the "S"
+            - "NCS?": the 3D Spring Ribbon coils beneath & around "S"
             - "?": question mark with glowing bouncing dot
-            - Indented slightly to the right, matching the reference image layout
+            - Cleanly centered
         ============================================================== */}
-        <div className="relative w-full overflow-visible ml-[5vw] sm:ml-[7vw] md:ml-[9vw] lg:ml-[11vw] -mt-1 sm:-mt-3 md:-mt-6">
-
-          {/* 3D Spring Ribbon Doodle (coiling beneath & around "S") */}
-          <div
-            ref={springRef}
-            onClick={handleSpringClick}
-            className="absolute -bottom-10 sm:-bottom-16 md:-bottom-24 lg:-bottom-28 right-[10%] sm:right-[12%] md:right-[15%] z-30 pointer-events-auto"
-            title="Click spring!"
-          >
-            <GsapSpringDoodle className="w-14 h-20 sm:w-20 sm:h-28 md:w-28 md:h-38 lg:w-36 lg:h-48" />
-          </div>
-
+        <div className="relative w-full overflow-visible flex justify-center -mt-1 sm:-mt-3 md:-mt-6">
           <div className="overflow-hidden py-1">
             <h1
               ref={line2Ref}
-              className="font-['Satoshi'] font-black text-[18vw] sm:text-[17vw] md:text-[16vw] lg:text-[15vw] xl:text-[175px] 2xl:text-[215px] leading-[0.82] tracking-[-0.045em] text-[#faf8f0] uppercase flex items-baseline flex-nowrap"
+              className="font-['Satoshi'] font-black text-[18vw] sm:text-[17vw] md:text-[16vw] lg:text-[15vw] xl:text-[175px] 2xl:text-[215px] leading-[0.82] tracking-[-0.045em] text-[#faf8f0] uppercase flex items-baseline flex-nowrap justify-center"
               style={{
                 fontFamily: "'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif",
                 textShadow: "0 6px 50px rgba(0,0,0,0.5)",
@@ -446,12 +435,22 @@ export default function GsapBigTextHero() {
                 C
               </span>
 
-              {/* "S" */}
+              {/* "S" with Spring Ribbon doodle anchored beside it */}
               <span
                 onMouseEnter={handleCharHover}
                 onMouseLeave={handleCharLeave}
                 className="inline-block transition-transform text-[#faf8f0] relative"
               >
+                <div className="absolute -bottom-[0.42em] -right-[0.25em] z-30 pointer-events-auto">
+                  <div
+                    ref={springRef}
+                    onClick={handleSpringClick}
+                    className="cursor-pointer"
+                    title="Click spring!"
+                  >
+                    <GsapSpringDoodle className="w-[0.62em] h-[0.84em]" />
+                  </div>
+                </div>
                 S
               </span>
 
