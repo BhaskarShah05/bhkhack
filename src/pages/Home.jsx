@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Footer from "../components/Footer"
 import CursorDrivenParticleTypography from "../components/CursorDrivenParticleTypography"
 import { LiquidMetalButton } from "../components/LiquidMetalButton"
@@ -156,115 +156,17 @@ function DisciplineCard({ name, className, icon }) {
 }
 
 export default function Home({ activePage = "Home", onNavigate }) {
-  const robotRef = useRef(null)
   const splineRef = useRef(null)
   const [isSplineLoaded, setIsSplineLoaded] = useState(false)
 
-  // Motion values for cursor tracking relative to the robot center
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-
-  // Fast, natural spring physics (zero jank, smooth settling)
-  const springConfig = { damping: 26, stiffness: 180, mass: 0.45 }
-  const smoothX = useSpring(mouseX, springConfig)
-  const smoothY = useSpring(mouseY, springConfig)
-
-  // 3D rotation: robot faces toward the cursor
-  // When cursor is left, rotateY tilts left; when right, tilts right
-  const rotateY = useTransform(smoothX, [-500, 500], [-14, 14])
-  // When cursor is above, rotateX tilts up; when below, tilts down
-  const rotateX = useTransform(smoothY, [-400, 400], [10, -10])
-
-  // Subtle 2D translation: robot drifts slightly toward the cursor
-  const translateX = useTransform(smoothX, [-500, 500], [-18, 18])
-  const translateY = useTransform(smoothY, [-400, 400], [-14, 14])
-
-  // Soft depth shadow underneath shifting counter to cursor
-  const shadowX = useTransform(smoothX, [-500, 500], [12, -12])
-  const shadowScale = useTransform(smoothY, [-400, 400], [0.92, 1.06])
-
-  // Optimized cursor tracking: bounds cached on resize/scroll to avoid layout thrashing
-  useEffect(() => {
-    let cachedCenter = null
-
-    const updateCenter = () => {
-      if (robotRef.current) {
-        const r = robotRef.current.getBoundingClientRect()
-        cachedCenter = {
-          cx: r.left + r.width / 2,
-          cy: r.top + r.height / 2,
-          inView: r.bottom >= -150 && r.top <= window.innerHeight + 150,
-        }
-      }
-    }
-
-    updateCenter()
-
-    let rafId = null
-
-    const handlePointerMove = (e) => {
-      if (!cachedCenter) updateCenter()
-      if (!cachedCenter || !cachedCenter.inView) return
-
-      const dx = e.clientX - cachedCenter.cx
-      const dy = e.clientY - cachedCenter.cy
-
-      // Bound delta to keep motion within natural ranges
-      const maxRange = 650
-      const clampedX = Math.max(-maxRange, Math.min(maxRange, dx))
-      const clampedY = Math.max(-maxRange, Math.min(maxRange, dy))
-
-      mouseX.set(clampedX)
-      mouseY.set(clampedY)
-
-      // Forward pointer event to Spline canvas in shadowRoot so internal 3D head/look-at tracks cursor
-      if (!rafId) {
-        rafId = requestAnimationFrame(() => {
-          rafId = null
-          const viewer = splineRef.current || document.querySelector("spline-viewer")
-          const canvas = viewer?.shadowRoot?.querySelector("canvas")
-          if (canvas) {
-            canvas.dispatchEvent(
-              new PointerEvent("pointermove", {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                bubbles: true,
-                cancelable: true,
-                pointerType: "mouse",
-              })
-            )
-          }
-        })
-      }
-    }
-
-    const handlePointerLeave = () => {
-      mouseX.set(0)
-      mouseY.set(0)
-    }
-
-    window.addEventListener("pointermove", handlePointerMove, { passive: true })
-    window.addEventListener("scroll", updateCenter, { passive: true })
-    window.addEventListener("resize", updateCenter, { passive: true })
-    document.addEventListener("mouseleave", handlePointerLeave)
-
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId)
-      window.removeEventListener("pointermove", handlePointerMove)
-      window.removeEventListener("scroll", updateCenter)
-      window.removeEventListener("resize", updateCenter)
-      document.removeEventListener("mouseleave", handlePointerLeave)
-    }
-  }, [mouseX, mouseY])
-
-  // Spline setup & watermark management
+  // Spline setup & watermark management (rock-solid, zero shake)
   useEffect(() => {
     document.body.style.overflow = ""
     document.body.classList.remove("spline-loading")
 
     const viewer = splineRef.current || document.querySelector("spline-viewer")
 
-    const setupSpline = () => {
+    const hideWatermark = () => {
       const v = splineRef.current || document.querySelector("spline-viewer")
       if (v?.shadowRoot) {
         let style = v.shadowRoot.querySelector("#hide-spline-logo-style")
@@ -290,20 +192,18 @@ export default function Home({ activePage = "Home", onNavigate }) {
         }
       }
 
-      // Keep orbit controls disabled so drag won't misplace camera, but preserve LookAt/eventManager
+      // Disable orbit controls so click-drag doesn't misplace the 3D scene,
+      // while Spline's built-in global LookAt tracks the cursor smoothly without shaking
       if (v?._spline?.controls?.orbitControls) {
         v._spline.controls.orbitControls.enableRotate = false
         v._spline.controls.orbitControls.enablePan = false
         v._spline.controls.orbitControls.enableZoom = false
         v._spline.controls.orbitControls.autoRotate = false
       }
-      if (v?._spline?.eventManager) {
-        v._spline.eventManager.updateUseWindowEvents?.(true)
-      }
     }
 
     const onSplineReady = () => {
-      setupSpline()
+      hideWatermark()
       setIsSplineLoaded(true)
     }
 
@@ -313,8 +213,8 @@ export default function Home({ activePage = "Home", onNavigate }) {
       if (viewer._loaded === true) onSplineReady()
     }
 
-    setupSpline()
-    const interval = setInterval(setupSpline, 100)
+    hideWatermark()
+    const interval = setInterval(hideWatermark, 100)
     return () => {
       clearInterval(interval)
       if (viewer) {
@@ -375,20 +275,10 @@ export default function Home({ activePage = "Home", onNavigate }) {
                 <DisciplineCard key={discipline.name} {...discipline} />
               ))}
 
-              {/* Center Robot with interactive cursor tracking in 3D */}
-              <div ref={robotRef} className="hero__robot">
-                <motion.div
-                  style={{
-                    x: translateX,
-                    y: translateY,
-                    rotateX: rotateX,
-                    rotateY: rotateY,
-                    transformPerspective: 1000,
-                    transformStyle: "preserve-3d",
-                  }}
-                  className="relative w-full h-full flex flex-col items-center justify-center pointer-events-auto will-change-transform"
-                >
-                  {/* Interactive 3D Spline viewer */}
+              {/* Center Robot with smooth 3D cursor tracking (zero shake) */}
+              <div className="hero__robot">
+                <div className="relative w-full h-full flex items-center justify-center pointer-events-auto">
+                  {/* Interactive 3D Spline viewer with native global cursor tracking */}
                   <spline-viewer
                     ref={splineRef}
                     url="https://prod.spline.design/uf2wIxgO0yhwMjDR/scene.splinecode"
@@ -405,16 +295,10 @@ export default function Home({ activePage = "Home", onNavigate }) {
                       alt="A friendly Nibble Computer Society robot"
                     />
                   )}
-                </motion.div>
+                </div>
 
-                {/* Soft ground shadow that shifts subtly opposite to cursor */}
-                <motion.div
-                  style={{
-                    x: shadowX,
-                    scaleX: shadowScale,
-                  }}
-                  className="absolute bottom-2 w-48 sm:w-64 h-3 rounded-full bg-black/70 blur-[10px] pointer-events-none -z-10"
-                />
+                {/* Ground shadow beneath robot */}
+                <div className="absolute bottom-2 w-48 sm:w-64 h-3 rounded-full bg-black/70 blur-[10px] pointer-events-none -z-10" />
               </div>
             </section>
           </div>
