@@ -132,7 +132,7 @@ export default function Project({ activePage = "Project", onNavigate }) {
             </p>
           </div>
           {/* Project Showcase Cards Grid matching design (3-3-2 layout on desktop, responsive on tablet/mobile) */}
-          <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-x-10 md:gap-y-12 items-start relative shrink-0 w-full max-w-[1240px] mx-auto px-2">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-x-[60px] md:gap-y-[60px] items-start relative shrink-0 w-full max-w-[1240px] mx-auto px-2">
             {allProjects.map((project) => (
               <ProjectCard
                 key={project.name}
@@ -141,6 +141,7 @@ export default function Project({ activePage = "Project", onNavigate }) {
                 technologies={project.technologies}
                 image={project.image}
                 url={project.url}
+                glowColor="blue"
               />
             ))}
           </div>
