@@ -22,6 +22,7 @@ const imgRectangle50 = `${assetPathPrefix}/78cf7.png`
 const imgNcsLogo = `${assetPathPrefix}/8f22e.svg`
 const imgNcsLogoWhite = publicAsset("assets/ncs-logo-white.svg")
 const imgRobotStatic = publicAsset("assets/robot-static.webp")
+const imgRobot3D = publicAsset("assets/robot-3d-mascot.png")
 const imgVector = `${assetPathPrefix}/69fdb.svg`
 const imgVector1 = `${assetPathPrefix}/67b5d.svg`
 const imgGroup1000002935 = `${assetPathPrefix}/84ab0.svg`
@@ -122,217 +123,15 @@ const eventSlides = eventGalleryItems.map((item) => ({
   linkUrl: item.href,
 }))
 
-let hasHomeLoadedOnce =
-  typeof window !== "undefined" && Boolean(sessionStorage.getItem("ncs_home_loaded"))
-
 export default function Home({ activePage = "Home", onNavigate }) {
-  const splineRef = useRef(null)
-  const [isSplineLoaded, setIsSplineLoaded] = useState(() => hasHomeLoadedOnce)
-  const [isMounted, setIsMounted] = useState(false)
-
   useEffect(() => {
-    setIsMounted(true)
-
-    let observer = null
-
-    const hideSplineWatermark = () => {
-      const viewer = splineRef.current || document.querySelector("spline-viewer")
-      if (viewer?.shadowRoot) {
-        // Inject an aggressive stylesheet directly into shadow DOM to hide #logo
-        let style = viewer.shadowRoot.querySelector("#hide-spline-logo-style")
-        if (!style) {
-          style = document.createElement("style")
-          style.id = "hide-spline-logo-style"
-          style.textContent = `
-            #logo,
-            #logo *,
-            a[href*="spline.design"],
-            a[href*="spline.design"] *,
-            .spline-watermark,
-            [aria-label*="Spline"] {
-              display: none !important;
-              opacity: 0 !important;
-              visibility: hidden !important;
-              pointer-events: none !important;
-              width: 0 !important;
-              height: 0 !important;
-              max-width: 0 !important;
-              max-height: 0 !important;
-              position: absolute !important;
-              top: -99999px !important;
-              left: -99999px !important;
-              clip: rect(0, 0, 0, 0) !important;
-              clip-path: inset(100%) !important;
-              transform: scale(0) !important;
-              overflow: hidden !important;
-            }
-            #spline,
-            canvas {
-              pointer-events: none !important;
-              touch-action: none !important;
-              user-select: none !important;
-            }
-          `
-          viewer.shadowRoot.appendChild(style)
-        }
-
-        // Permanently remove logo element from DOM
-        const logo =
-          viewer.shadowRoot.querySelector("#logo") ||
-          viewer.shadowRoot.querySelector('a[href*="spline.design"]')
-        if (logo) {
-          try {
-            logo.remove()
-          } catch (e) {
-            logo.style.setProperty("display", "none", "important")
-            logo.style.setProperty("opacity", "0", "important")
-            logo.style.setProperty("visibility", "hidden", "important")
-          }
-        }
-
-        if (viewer._logo) {
-          try {
-            viewer._logo.remove()
-          } catch (e) {
-            viewer._logo.style.display = "none"
-          }
-        }
-
-        if (viewer._spline?.data?.scene?.publish?.settings?.web) {
-          viewer._spline.data.scene.publish.settings.web.logo = false
-        }
-
-        if (viewer._spline?.controls?.orbitControls) {
-          viewer._spline.controls.orbitControls.enabled = false
-          viewer._spline.controls.orbitControls.enableRotate = false
-          viewer._spline.controls.orbitControls.enablePan = false
-          viewer._spline.controls.orbitControls.enableZoom = false
-          viewer._spline.controls.orbitControls.autoRotate = false
-        }
-        if (viewer._spline?.eventManager?.publish?.orbitControls) {
-          viewer._spline.eventManager.publish.orbitControls.enableRotate = false
-          viewer._spline.eventManager.publish.orbitControls.enablePan = false
-          viewer._spline.eventManager.publish.orbitControls.enableZoom = false
-          viewer._spline.eventManager.publish.orbitControls.autoRotate = false
-        }
-
-        // Attach observer to catch any delayed re-injection by Spline
-        if (!observer && typeof MutationObserver !== "undefined") {
-          observer = new MutationObserver(() => {
-            const el =
-              viewer.shadowRoot.querySelector("#logo") ||
-              viewer.shadowRoot.querySelector('a[href*="spline.design"]')
-            if (el) {
-              try {
-                el.remove()
-              } catch (e) {
-                el.style.setProperty("display", "none", "important")
-              }
-            }
-          })
-          observer.observe(viewer.shadowRoot, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-          })
-        }
-      }
-    }
-
-    // On mobile screens or subsequent visits, no 3D loading overlay needed
-    const isMobileScreen = typeof window !== "undefined" && window.innerWidth < 768
-    if (isMobileScreen || hasHomeLoadedOnce) {
-      hasHomeLoadedOnce = true
-      try {
-        sessionStorage.setItem("ncs_home_loaded", "true")
-      } catch (e) {}
-      setIsSplineLoaded(true)
-      document.body.style.overflow = ""
-      document.body.classList.remove("spline-loading")
-
-      hideSplineWatermark()
-      const interval = setInterval(hideSplineWatermark, 100)
-      return () => {
-        clearInterval(interval)
-        if (observer) {
-          observer.disconnect()
-        }
-        document.body.style.overflow = ""
-        document.body.classList.remove("spline-loading")
-      }
-    }
-
-    document.body.style.overflow = "hidden"
-    document.body.classList.add("spline-loading")
-
-    let isFinished = false
-    const finishLoading = () => {
-      if (isFinished) return
-      isFinished = true
-      hasHomeLoadedOnce = true
-      try {
-        sessionStorage.setItem("ncs_home_loaded", "true")
-      } catch (e) {}
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            setIsSplineLoaded(true)
-            document.body.style.overflow = ""
-            document.body.classList.remove("spline-loading")
-          }, 350)
-        })
-      })
-    }
-
-    hideSplineWatermark()
-
-    const handleSplineReady = () => {
-      hideSplineWatermark()
-      const v = splineRef.current || document.querySelector("spline-viewer")
-      if (v?._spline?.controls?.orbitControls) {
-        v._spline.controls.orbitControls.enabled = false
-        v._spline.controls.orbitControls.enableRotate = false
-        v._spline.controls.orbitControls.enablePan = false
-        v._spline.controls.orbitControls.enableZoom = false
-        v._spline.controls.orbitControls.autoRotate = false
-      }
-      finishLoading()
-    }
-
-    const viewer = splineRef.current || document.querySelector("spline-viewer")
-    if (viewer) {
-      viewer.addEventListener("load-complete", handleSplineReady)
-      viewer.addEventListener("loaded", handleSplineReady)
-      // Only complete immediately if Spline has already finished loading previously
-      if (viewer._loaded === true) {
-        handleSplineReady()
-      }
-    }
-
-    const interval = setInterval(hideSplineWatermark, 100)
-    // Generous fallback safety timeout (18s) in case network is disconnected
-    const timeout = setTimeout(() => {
-      finishLoading()
-    }, 18000)
-
-    return () => {
-      clearInterval(interval)
-      clearTimeout(timeout)
-      if (observer) {
-        observer.disconnect()
-      }
-      document.body.style.overflow = ""
-      document.body.classList.remove("spline-loading")
-      if (viewer) {
-        viewer.removeEventListener("load-complete", handleSplineReady)
-        viewer.removeEventListener("loaded", handleSplineReady)
-      }
-    }
+    document.body.style.overflow = ""
+    document.body.classList.remove("spline-loading")
   }, [])
 
   return (
     <div
-      className="bg-transparent relative w-full max-w-[1668px] min-h-screen mx-auto flex flex-col items-center pt-[27px] pb-[40px] shrink-0 overflow-hidden"
+      className="bg-transparent relative w-full max-w-[1668px] min-h-screen mx-auto flex flex-col items-center pt-[20px] pb-[40px] shrink-0 overflow-hidden"
       data-node-id="1:24"
       data-name="Home"
     >
@@ -344,110 +143,109 @@ export default function Home({ activePage = "Home", onNavigate }) {
           className="content-stretch flex flex-col gap-24 md:gap-[200px] items-center relative shrink-0 w-full"
           data-node-id="1:36"
         >
+          {/* Hero Section matching design: Left text + Right 3D mascot */}
           <div
-            className="relative w-full flex flex-col-reverse md:flex-row items-center justify-between min-h-[calc(100vh-103px)] md:min-h-[560px] lg:min-h-[660px] xl:min-h-[720px] md:-mt-[40px] overflow-visible"
+            className="relative w-full max-w-[1240px] mx-auto flex flex-col-reverse lg:flex-row items-center justify-between min-h-[calc(100vh-130px)] lg:min-h-[580px] xl:min-h-[660px] py-6 sm:py-8 lg:py-0 gap-8 sm:gap-12 lg:gap-8 overflow-visible"
             data-node-id="1:37"
+            data-name="Hero Section"
           >
-            {/* Mobile View: Static Robot Image with Infinite Multi-axis Floating Effect */}
+            {/* Left Column: Heading, Subtitle & CTA */}
             <div
-              className="relative z-0 block md:hidden w-full max-w-[210px] xs:max-w-[230px] sm:max-w-[260px] h-[190px] xs:h-[210px] sm:h-[240px] mx-auto mt-12 xs:mt-16 sm:mt-20 mb-8 select-none pointer-events-none flex flex-col items-center justify-center"
-              data-node-id="1:38-mobile"
-              data-name="Hero Static Robot"
-            >
-              <motion.img
-                animate={{
-                  y: [0, -14, 2, -10, 0],
-                  x: [0, 4, -3, 3, 0],
-                  rotate: [0, 2.5, -2, 1.5, 0],
-                }}
-                transition={{
-                  duration: 5.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                src={imgRobotStatic}
-                alt="Nibble Robot"
-                className="w-full h-full object-contain filter drop-shadow-[0_16px_28px_rgba(0,0,0,0.85)]"
-              />
-              {/* Dynamic floating shadow beneath */}
-              <motion.div
-                animate={{
-                  scaleX: [1, 0.82, 1.05, 0.88, 1],
-                  opacity: [0.4, 0.22, 0.45, 0.28, 0.4],
-                }}
-                transition={{
-                  duration: 5.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="w-28 h-2.5 rounded-full bg-black/60 blur-[6px] -mt-1 pointer-events-none"
-              />
-            </div>
-
-            {/* Desktop View: Full Interactive 3D Spline Scene */}
-            <div
-              className="relative z-0 hidden md:flex md:absolute md:right-[-24px] lg:right-[-12px] xl:right-[15px] md:top-1/2 md:-translate-y-1/2 w-[clamp(340px,46vw,816px)] h-[clamp(340px,43vw,725px)] select-none justify-center items-center pointer-events-none"
-              data-node-id="1:38"
-              data-name="Hero Spline 3D"
-            >
-              <spline-viewer
-                ref={splineRef}
-                url="https://prod.spline.design/uf2wIxgO0yhwMjDR/scene.splinecode"
-                className="w-full h-full block pointer-events-none"
-                style={{ width: "100%", height: "100%", pointerEvents: "none" }}
-              ></spline-viewer>
-            </div>
-
-            {/* Left Typography & CTA */}
-            <div
-              className="flex flex-col gap-6 sm:gap-7 md:gap-8 items-center text-center relative z-10 w-full md:w-auto md:max-w-[58%] lg:max-w-[56%] xl:max-w-[780px] shrink-0"
+              className="flex flex-col items-start text-left relative z-10 w-full lg:w-[54%] xl:w-[56%] shrink-0"
               data-node-id="1:39"
             >
-              <div className="flex flex-col not-italic items-center text-center relative shrink-0 w-full gap-2 sm:gap-3">
-                {/* 1. NIBBLE */}
-                <WaveText
-                  as="h1"
-                  repeat
-                  base="#ffffff"
-                  shape="radial"
-                  className="mb-0 font-['Satoshi',Arial,sans-serif] font-black text-[34px] xs:text-[42px] sm:text-[56px] md:text-[clamp(44px,4.6vw,66px)] lg:text-[clamp(58px,5.2vw,82px)] xl:text-[88px] leading-[1.05] tracking-[-0.035em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none text-center"
-                >
+              <div className="flex flex-col not-italic items-start text-left relative shrink-0 w-full gap-1 sm:gap-2">
+                {/* 1. NIBBLE with Holographic Iridescent Texture */}
+                <h1 className="holographic-foil-text mb-0 font-['Satoshi',Arial,sans-serif] font-black text-[46px] xs:text-[56px] sm:text-[70px] md:text-[82px] lg:text-[92px] xl:text-[102px] leading-[0.98] tracking-[-0.035em] drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)] select-none text-left uppercase">
                   NIBBLE
-                </WaveText>
+                </h1>
 
                 {/* 2. COMPUTER SOCIETY */}
-                <p className="mb-0 text-[#B0B0B8] font-['Satoshi',Arial,sans-serif] font-black text-[27px] xs:text-[34px] sm:text-[45px] md:text-[clamp(34px,3.8vw,54px)] lg:text-[clamp(46px,4.4vw,66px)] xl:text-[72px] leading-[1.05] tracking-[-0.035em] whitespace-nowrap text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
+                <p className="mb-0 text-[#E0E0E8] font-['Satoshi',Arial,sans-serif] font-black text-[30px] xs:text-[38px] sm:text-[50px] md:text-[58px] lg:text-[66px] xl:text-[74px] leading-[1.02] tracking-[-0.03em] whitespace-nowrap text-left drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)] select-none uppercase">
                   COMPUTER SOCIETY
                 </p>
 
                 {/* 3. Subtitle Description */}
-                <div className="font-['Playfair_Display',Georgia,serif] italic font-normal text-[15px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] leading-[1.45] text-[#82828A] flex flex-col gap-0.5 sm:gap-1 mt-2.5 sm:mt-3 text-center select-none">
+                <div className="font-['Playfair_Display',Georgia,serif] italic font-normal text-[15px] xs:text-[17px] sm:text-[19px] md:text-[21px] lg:text-[22px] leading-[1.48] text-[#8E8E98] flex flex-col gap-0.5 sm:gap-1 mt-4 sm:mt-5 text-left select-none max-w-[620px]">
                   <p className="mb-0">A community driven by curiosity, creativity, and innovation.</p>
                   <p className="mb-0">Turning bold ideas into technology that shapes tomorrow.</p>
                 </div>
               </div>
 
-              {/* Join the Community Pill Button with Liquid Metal Shader */}
-              <div className="w-full flex justify-center pt-6 sm:pt-8 md:pt-10 lg:pt-12">
-                <LiquidMetalButton
-                  label="Join the Community"
+              {/* 4. Join the Community Pill Button */}
+              <div className="pt-7 sm:pt-9 md:pt-11 flex justify-start w-full">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
-                    const connectEl = document.getElementById("connect-section")
-                    if (connectEl) {
-                      connectEl.scrollIntoView({ behavior: "smooth" })
+                    const clubsEl = document.getElementById("clubs-section")
+                    if (clubsEl) {
+                      clubsEl.scrollIntoView({ behavior: "smooth" })
                     } else {
                       window.scrollTo({
-                        top: document.body.scrollHeight,
+                        top: window.innerHeight * 0.9,
                         behavior: "smooth",
                       })
                     }
                   }}
-                />
+                  className="group relative inline-flex items-center justify-center p-[1.5px] rounded-full overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] hover:shadow-[0_0_30px_rgba(255,255,255,0.18)] cursor-pointer"
+                >
+                  {/* Subtle luminous metallic border */}
+                  <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/35 via-white/15 to-white/35 group-hover:from-white/60 group-hover:to-white/50 transition-all duration-300" />
+                  {/* Translucent dark glass core */}
+                  <span className="relative z-10 px-8 py-3.5 sm:px-9 sm:py-4 rounded-full bg-[#0a0a0d]/80 group-hover:bg-[#121216]/85 backdrop-blur-xl flex items-center justify-center transition-all duration-300">
+                    <span className="font-['Satoshi',Arial,sans-serif] font-medium text-[15px] sm:text-[17px] text-[#EDEDF2] group-hover:text-white tracking-wide">
+                      Join the Community
+                    </span>
+                  </span>
+                </motion.button>
               </div>
+            </div>
+
+            {/* Right Column: 3D Robot Mascot */}
+            <div
+              className="relative z-10 w-full lg:w-[46%] xl:w-[44%] flex flex-col items-center justify-center select-none pointer-events-none mb-4 lg:mb-0"
+              data-node-id="1:38"
+              data-name="Hero 3D Mascot"
+            >
+              <motion.div
+                animate={{
+                  y: [0, -18, 2, -10, 0],
+                  x: [0, 5, -4, 3, 0],
+                  rotate: [0, 1.8, -1.2, 0.8, 0],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative w-full max-w-[280px] xs:max-w-[340px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[540px] xl:max-w-[600px] flex items-center justify-center"
+              >
+                <img
+                  src={imgRobot3D}
+                  alt="Nibble Computer Society Mascot"
+                  className="w-full h-auto object-contain filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)]"
+                  loading="eager"
+                />
+              </motion.div>
+              {/* Dynamic floating shadow beneath */}
+              <motion.div
+                animate={{
+                  scaleX: [1, 0.82, 1.06, 0.88, 1],
+                  opacity: [0.55, 0.25, 0.6, 0.3, 0.55],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="w-44 sm:w-64 md:w-80 h-3 rounded-full bg-black/80 blur-[8px] -mt-2 sm:-mt-4 pointer-events-none"
+              />
             </div>
           </div>
 
           <div
+            id="clubs-section"
             className="flex flex-col gap-10 md:gap-[20px] items-center relative shrink-0 w-full max-w-[1400px]"
             data-node-id="1:48"
           >
@@ -740,35 +538,6 @@ export default function Home({ activePage = "Home", onNavigate }) {
           </div>
         </div>
       </div>
-
-      {/* Full-Screen Loading Screen: Black background with NCS Logo in the middle */}
-      {isMounted &&
-        createPortal(
-          <AnimatePresence>
-            {!isSplineLoaded && (
-              <motion.div
-                className="fixed inset-0 z-[999999] w-screen h-screen bg-black flex items-center justify-center p-6 select-none overflow-hidden"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <motion.div
-                  initial={{ opacity: 0.85, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="w-[140px] xs:w-[160px] sm:w-[190px] md:w-[220px] flex items-center justify-center pointer-events-none select-none"
-                >
-                  <img
-                    src={imgNcsLogoWhite}
-                    alt="Nibble Computer Society"
-                    className="w-full h-auto object-contain filter drop-shadow-[0_2px_16px_rgba(255,255,255,0.2)]"
-                  />
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>,
-          document.body
-        )}
     </div>
   )
 }

@@ -410,3 +410,32 @@ body.spline-loading header {
   animation-duration: 3.75s;
   animation-iteration-count: infinite;
 }
+
+/* Holographic foil text matching design */
+.holographic-foil-text {
+  background: linear-gradient(
+    115deg,
+    #9bf8d4 0%,
+    #b2f5ea 12%,
+    #fcd0a1 28%,
+    #fdb398 42%,
+    #f0abfc 60%,
+    #a5b4fc 78%,
+    #85dced 90%,
+    #bbf7d0 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holographicShift 7s ease-in-out infinite alternate;
+}
+
+@keyframes holographicShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
