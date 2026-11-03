@@ -450,7 +450,8 @@ function JumpingText({ text, slideIdx, className = "" }) {
 }
 
 export default function GsapHorizontalShowcase() {
-  const sectionRef = useRef(null)
+  const outerRef = useRef(null)
+  const stickyRef = useRef(null)
   const trackRef = useRef(null)
   const progressBarRef = useRef(null)
   const slideRefs = useRef([])
@@ -734,140 +735,135 @@ export default function GsapHorizontalShowcase() {
     }
   }, [])
 
+  const dimsRef = useRef({ totalScrollableDistance: 0, maxHorizontalTranslate: 0, outerTop: 0 })
+  const slideCentersRef = useRef([0, 0, 0, 0])
+  const targetXRef = useRef(0)
+  const currentXRef = useRef(0)
+  const isLoopRunningRef = useRef(false)
+  const rafIdRef = useRef(null)
+
+  const updateDims = useCallback(() => {
+    if (!outerRef.current || !trackRef.current) return
+    const stickyHeight = stickyRef.current ? stickyRef.current.offsetHeight : window.innerHeight
+    const totalDist = outerRef.current.offsetHeight - stickyHeight
+    const trackWidth = trackRef.current.scrollWidth
+    const viewportWidth = window.innerWidth
+    const maxTranslate = Math.max(0, trackWidth - viewportWidth + 120)
+
+    const rect = outerRef.current.getBoundingClientRect()
+    const outerTop = window.scrollY + rect.top
+
+    // Precalculate slide centers inside the track so we don't query DOM during scroll
+    slideCentersRef.current = slideRefs.current.map((el) => {
+      if (!el) return 0
+      return el.offsetLeft + el.offsetWidth / 2
+    })
+
+    dimsRef.current = { totalScrollableDistance: totalDist, maxHorizontalTranslate: maxTranslate, outerTop }
+  }, [])
+
+  const startLerpLoop = useCallback(() => {
+    if (isLoopRunningRef.current) return
+    isLoopRunningRef.current = true
+
+    const tick = () => {
+      const targetX = targetXRef.current
+      const diff = targetX - currentXRef.current
+
+      if (Math.abs(diff) > 0.25) {
+        currentXRef.current += diff * 0.16
+      } else {
+        currentXRef.current = targetX
+      }
+
+      const curX = currentXRef.current
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translate3d(${curX}px, 0, 0)`
+      }
+
+      const maxTrans = dimsRef.current.maxHorizontalTranslate
+      if (progressBarRef.current && maxTrans > 0) {
+        const p = Math.max(0, Math.min(1, -curX / maxTrans))
+        progressBarRef.current.style.transform = `scaleX(${p})`
+      }
+
+      // Check slide activations using cached offsets without DOM layout recalculations
+      const viewportCenter = window.innerWidth / 2
+      const progress = maxTrans > 0 ? -curX / maxTrans : 0
+      const inRange = progress > -0.05 && progress < 1.05
+
+      if (inRange) {
+        slideCentersRef.current.forEach((centerInTrack, idx) => {
+          const slideScreenX = centerInTrack + curX
+          const dist = Math.abs(slideScreenX - viewportCenter)
+          if (dist < window.innerWidth * 0.38) {
+            if (!hasAnimatedRef.current[idx]) {
+              hasAnimatedRef.current[idx] = true
+              triggerSlideAnimation(idx)
+            }
+          } else if (dist > window.innerWidth * 0.62) {
+            hasAnimatedRef.current[idx] = false
+          }
+        })
+      } else if (progress < 0.05) {
+        hasAnimatedRef.current = [false, false, false, false]
+      }
+
+      if (Math.abs(diff) > 0.25) {
+        rafIdRef.current = requestAnimationFrame(tick)
+      } else {
+        isLoopRunningRef.current = false
+      }
+    }
+
+    rafIdRef.current = requestAnimationFrame(tick)
+  }, [triggerSlideAnimation])
+
+  // Direct vertical-to-horizontal position synchronizer with hardware accelerated transform
+  const syncHorizontalPosition = useCallback(() => {
+    if (!outerRef.current || !trackRef.current) return
+    const rect = outerRef.current.getBoundingClientRect()
+    const stickyHeight = stickyRef.current ? stickyRef.current.offsetHeight : window.innerHeight
+    const totalScrollableDistance = outerRef.current.offsetHeight - stickyHeight
+    if (totalScrollableDistance <= 0) return
+
+    const currentScrollOffset = -rect.top
+    const rawProgress = Math.max(0, Math.min(1, currentScrollOffset / totalScrollableDistance))
+    const maxHorizontalTranslate = dimsRef.current.maxHorizontalTranslate
+    targetXRef.current = -rawProgress * maxHorizontalTranslate
+    startLerpLoop()
+  }, [startLerpLoop])
+
   useEffect(() => {
-    const section = sectionRef.current
-    const track = trackRef.current
-    if (!section || !track) return
+    updateDims()
 
-    let ctx = null
+    const onScroll = () => {
+      syncHorizontalPosition()
+    }
 
-    // Delay slightly to ensure fonts, DOM measurements and layouts are resolved
-    const timer = setTimeout(() => {
-      ctx = gsap.context(() => {
-        const getScrollDistance = () => {
-          if (!track) return 0
-          return Math.max(0, track.scrollWidth - window.innerWidth + window.innerWidth * 0.12)
-        }
+    const onResize = () => {
+      updateDims()
+      syncHorizontalPosition()
+    }
 
-        const getNavOffset = () => (window.innerWidth < 640 ? 70 : window.innerWidth < 768 ? 76 : 84)
+    window.addEventListener("resize", onResize, { passive: true })
+    window.addEventListener("scroll", onScroll, { passive: true })
 
-        // 1. Rock-solid GSAP ScrollTrigger pinning and horizontal scrub
-        gsap.to(track, {
-          x: () => -getScrollDistance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            pin: true,
-            pinSpacing: true,
-            start: () => `top ${getNavOffset()}px`,
-            end: () => `+=${getScrollDistance()}`,
-            scrub: 0.6,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              if (progressBarRef.current) {
-                progressBarRef.current.style.transform = `scaleX(${self.progress})`
-              }
+    syncHorizontalPosition()
 
-              // Check slide centers to trigger jump text animations
-              const viewportCenter = window.innerWidth / 2
-              slideRefs.current.forEach((slideEl, idx) => {
-                if (!slideEl) return
-                const sRect = slideEl.getBoundingClientRect()
-                const slideCenter = sRect.left + sRect.width / 2
-                const distFromCenter = Math.abs(slideCenter - viewportCenter)
-
-                if (distFromCenter < window.innerWidth * 0.42) {
-                  if (!hasAnimatedRef.current[idx]) {
-                    hasAnimatedRef.current[idx] = true
-                    triggerSlideAnimation(idx)
-                  }
-                } else if (distFromCenter > window.innerWidth * 0.65) {
-                  hasAnimatedRef.current[idx] = false
-                }
-              })
-            },
-          },
-        })
-
-        // 2. Idle floating animations for the interactive doodles
-        gsap.to(".anim-starburst", {
-          rotation: 360,
-          duration: 22,
-          repeat: -1,
-          ease: "none",
-        })
-
-        gsap.to(".anim-diamond", {
-          y: -4,
-          rotate: 15,
-          duration: 1.5,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        })
-
-        gsap.to(".anim-lightning", {
-          y: -5,
-          rotate: 4,
-          duration: 1.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        })
-
-        gsap.to(".anim-hourglass", {
-          y: -8,
-          rotate: -12,
-          duration: 2.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        })
-
-        gsap.to(".anim-spring", {
-          y: 8,
-          scaleY: 1.12,
-          duration: 1.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        })
-
-        gsap.to(".anim-cube", {
-          y: -6,
-          rotate: 8,
-          duration: 2.0,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        })
-
-        gsap.to(".anim-cursor", {
-          x: 4,
-          y: -4,
-          duration: 1.4,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        })
-
-        gsap.to(".anim-flower", {
-          rotation: "+=360",
-          duration: 14,
-          repeat: -1,
-          ease: "none",
-        })
-      }, section)
-
+    const initialTimer = setTimeout(() => {
+      updateDims()
+      syncHorizontalPosition()
       ScrollTrigger.refresh()
-    }, 150)
+    }, 280)
 
     return () => {
-      clearTimeout(timer)
-      if (ctx) ctx.revert()
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onResize)
+      clearTimeout(initialTimer)
     }
-  }, [triggerSlideAnimation])
+  }, [syncHorizontalPosition, updateDims])
 
   // Interactive bounce triggers
   const triggerBounce = (e) => {
@@ -895,16 +891,23 @@ export default function GsapHorizontalShowcase() {
   }
 
   return (
-    <section
-      ref={sectionRef}
-      className="bg-transparent relative w-full h-[calc(100vh-70px)] sm:h-[calc(100vh-76px)] md:h-[calc(100vh-84px)] overflow-hidden flex flex-col justify-between py-4 select-none z-10"
+    <div
+      ref={outerRef}
+      className="bg-transparent relative w-full h-[360vh] select-none z-10"
+      style={{ overflow: "visible" }}
     >
-      {/* Main Wide Horizontal Track */}
-      <div className="relative w-full overflow-visible my-auto pt-6 sm:pt-10">
-        <div
-          ref={trackRef}
-          className="flex flex-row items-center will-change-transform pl-[6vw] sm:pl-[8vw] pr-[20vw] space-x-16 sm:space-x-24 md:space-x-32"
-        >
+      {/* Sticky Viewport Container: Locks into view as user scrolls through vertical runway */}
+      <div
+        ref={stickyRef}
+        className="sticky top-[70px] sm:top-[76px] md:top-[84px] h-[calc(100vh-70px)] sm:h-[calc(100vh-76px)] md:h-[calc(100vh-84px)] w-full overflow-hidden flex flex-col justify-between py-4"
+        style={{ contain: "paint" }}
+      >
+        {/* Main Wide Horizontal Track */}
+        <div className="relative w-full overflow-visible my-auto pt-6 sm:pt-10">
+          <div
+            ref={trackRef}
+            className="flex flex-row items-center will-change-transform pl-[6vw] sm:pl-[8vw] pr-[25vw] space-x-16 sm:space-x-24 md:space-x-32"
+          >
 
             {/* ==============================================================
                 POINT 1: CURIOSITY INTO CREATION
@@ -1175,6 +1178,7 @@ export default function GsapHorizontalShowcase() {
             />
           </div>
         </div>
-      </section>
+      </div>
+    </div>
   )
 }

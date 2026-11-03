@@ -208,9 +208,9 @@ export default function TeamMembersMarquee() {
         </div>
 
         {/* =========================================================================
-            BIG "ACHIEVEMENTS" HEADLINE: Clean headline standing above the photo carousel
+            BIG "ACHIEVEMENTS" HEADLINE: Placed on the left, slightly overlaid at the bottom by carousel
         ========================================================================= */}
-        <div className="relative z-0 w-full max-w-[1650px] mx-auto px-6 sm:px-10 lg:px-16 mb-6 sm:mb-8 md:mb-12 select-none">
+        <div className="relative z-0 w-full max-w-[1650px] mx-auto px-6 sm:px-10 lg:px-16 -mb-2 sm:-mb-3 md:-mb-5 lg:-mb-6 select-none">
           <div className="achieve-heading flex items-baseline gap-3 sm:gap-5 flex-wrap">
             <h2
               className="font-['Playfair_Display',Georgia,serif] text-[15vw] sm:text-[13vw] md:text-[11vw] lg:text-[130px] xl:text-[158px] text-[#faf8f0] font-normal leading-[0.9] tracking-tight drop-shadow-[0_12px_32px_rgba(0,0,0,0.85)] inline-block select-none"
@@ -228,9 +228,9 @@ export default function TeamMembersMarquee() {
         </div>
 
         {/* =========================================================================
-            PHOTO MARQUEE CAROUSEL: Positioned with comfortable clearance below Achievements
+            PHOTO MARQUEE CAROUSEL: Positioned lower so it only subtly overlaps the bottom baseline
         ========================================================================= */}
-        <div className="relative z-10 w-full pt-4 sm:pt-6 md:pt-8">
+        <div className="relative z-10 w-full pt-1 sm:pt-2">
           <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-24 sm:w-36 bg-gradient-to-r from-black via-black/80 to-transparent" />
           <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 sm:w-36 bg-gradient-to-l from-black via-black/80 to-transparent" />
 
