@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import GsapBigTextHero from "../components/about/GsapBigTextHero"
-import GsapHorizontalShowcase from "../components/about/GsapHorizontalShowcase"
+import TimelineBlock01 from "../components/TimelineBlock01"
 import TeamMembersMarquee from "../components/about/TeamMembersMarquee"
 import Footer from "../components/Footer"
 
@@ -20,8 +20,8 @@ export default function About({ activePage = "About" }) {
       {/* 1. Big animated text that covers the screen */}
       <GsapBigTextHero />
 
-      {/* 2. GSAP Horizontal Showcase: user scrolls vertically, stuff scrolls horizontally */}
-      <GsapHorizontalShowcase />
+      {/* 2. What We Do — vertical scroll timeline */}
+      <TimelineBlock01 />
 
       {/* 3. Creative Team Members Marquee Section */}
       <TeamMembersMarquee />

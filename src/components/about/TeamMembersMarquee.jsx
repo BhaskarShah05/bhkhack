@@ -22,58 +22,6 @@ function Image({ src, alt, fill, className = "", ...props }) {
   )
 }
 
-/**
- * Bespoke Golden Victory Halo & Diamond Starburst Doodle
- * Floats beside the massive "Achievements" text with energetic GSAP physics
- */
-function AchievementCrownDoodle({ className = "w-16 h-16 sm:w-20 sm:h-20", onClick }) {
-  return (
-    <span
-      onClick={onClick}
-      className="inline-block cursor-pointer select-none transition-transform hover:scale-125"
-      title="Click achievement spark!"
-    >
-      <svg className={className} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="achieveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fef08a" />
-            <stop offset="50%" stopColor="#facc15" />
-            <stop offset="100%" stopColor="#f97316" />
-          </linearGradient>
-          <linearGradient id="swirlGradAchieve" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#38bdf8" />
-            <stop offset="100%" stopColor="#0ae448" />
-          </linearGradient>
-          <filter id="achieveGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="#facc15" floodOpacity="0.5" />
-          </filter>
-        </defs>
-        <g filter="url(#achieveGlow)">
-          {/* Swirling energy loop */}
-          <path
-            d="M 20 85 C 10 40, 60 15, 95 35 C 110 48, 105 85, 70 95 C 40 102, 25 70, 48 55"
-            stroke="url(#swirlGradAchieve)"
-            strokeWidth="5"
-            strokeLinecap="round"
-            fill="none"
-          />
-          {/* 8-point golden diamond starburst */}
-          <g transform="translate(68, 52)">
-            <path
-              d="M 0 -32 L 7 -10 L 28 -14 L 14 0 L 28 14 L 7 10 L 0 32 L -7 10 L -28 14 L -14 0 L -28 -14 L -7 -10 Z"
-              fill="url(#achieveGrad)"
-            />
-            <circle cx="0" cy="0" r="5" fill="#ffffff" />
-          </g>
-          {/* Accent sparkles */}
-          <circle cx="22" cy="38" r="3.5" fill="#fde047" />
-          <circle cx="102" cy="78" r="3" fill="#38bdf8" />
-        </g>
-      </svg>
-    </span>
-  )
-}
-
 const teamMembers = [
   {
     image: publicAsset("assets/achievments/Ajinkya Mishra.webp"),
@@ -137,45 +85,10 @@ export default function TeamMembersMarquee() {
           },
         }
       )
-
-      // Doodle pop entrance
-      gsap.fromTo(
-        ".achieve-doodle",
-        { scale: 0, rotate: -45 },
-        {
-          scale: 1,
-          rotate: 0,
-          duration: 1.2,
-          ease: "elastic.out(1.5, 0.3)",
-          delay: 0.25,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 85%",
-          },
-        }
-      )
-
-      // Idle float for the doodle
-      gsap.to(".achieve-doodle-float", {
-        y: -10,
-        rotate: 6,
-        duration: 2.6,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      })
     }, containerRef)
 
     return () => ctx.revert()
   }, [])
-
-  const triggerBounce = (e) => {
-    gsap.fromTo(
-      e.currentTarget,
-      { scale: 0.7, rotate: "-=90" },
-      { scale: 1, rotate: "+=90", duration: 0.9, ease: "elastic.out(1.5, 0.3)" }
-    )
-  }
 
   return (
     <div ref={containerRef} className="dark w-full">
@@ -208,7 +121,7 @@ export default function TeamMembersMarquee() {
         </div>
 
         {/* =========================================================================
-            BIG "ACHIEVEMENTS" HEADLINE: Placed on the left, slightly overlaid at the bottom by carousel
+            BIG "ACHIEVEMENTS" HEADLINE
         ========================================================================= */}
         <div className="relative z-0 w-full max-w-[1650px] mx-auto px-6 sm:px-10 lg:px-16 -mb-2 sm:-mb-3 md:-mb-5 lg:-mb-6 select-none">
           <div className="achieve-heading flex items-baseline gap-3 sm:gap-5 flex-wrap">
@@ -218,19 +131,13 @@ export default function TeamMembersMarquee() {
             >
               Achievements
             </h2>
-            {/* Playful GSAP Doodle floating right beside the word */}
-            <div className="achieve-doodle inline-block -translate-y-2 sm:-translate-y-4">
-              <div className="achieve-doodle-float">
-                <AchievementCrownDoodle onClick={triggerBounce} className="w-14 h-14 sm:w-18 sm:h-18 md:w-22 md:h-22" />
-              </div>
-            </div>
           </div>
         </div>
 
         {/* =========================================================================
-            PHOTO MARQUEE CAROUSEL: Positioned lower so it only subtly overlaps the bottom baseline
+            PHOTO MARQUEE CAROUSEL — extra top padding creates space after the heading
         ========================================================================= */}
-        <div className="relative z-10 w-full pt-1 sm:pt-2">
+        <div className="relative z-10 w-full pt-10 sm:pt-14 md:pt-16">
           <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-24 sm:w-36 bg-gradient-to-r from-black via-black/80 to-transparent" />
           <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 sm:w-36 bg-gradient-to-l from-black via-black/80 to-transparent" />
 
