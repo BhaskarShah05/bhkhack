@@ -446,15 +446,12 @@ body.spline-loading header {
 .hero-custom {
   position: relative;
   width: 100%;
-  min-height: max(100dvh, 760px);
+  min-height: auto;
   overflow: visible;
   background: transparent;
-}
-
-@media (min-width: 901px) {
-  .hero-custom {
-    min-height: 1220px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero__intro {
@@ -463,7 +460,7 @@ body.spline-loading header {
   display: flex;
   width: min(88vw, 980px);
   margin: 0 auto;
-  padding-top: clamp(16px, 3vh, 48px);
+  padding-top: clamp(16px, 2.5vh, 32px);
   flex-direction: column;
   align-items: center;
   text-align: center;
@@ -576,23 +573,20 @@ body.spline-loading header {
 }
 
 .hero__visual {
-  position: absolute;
+  position: relative;
   z-index: 1;
-  top: min(40vh, 440px);
-  left: 50%;
-  width: min(96vw, 1500px);
-  height: min(65vw, 760px);
-  transform: translateX(-50%);
+  width: min(96vw, 1440px);
+  height: min(52vw, 560px);
+  margin: 8px auto 0;
 }
 
 .hero__robot {
   position: absolute;
   z-index: 3;
-  top: 0;
+  top: -30px;
   left: 50%;
-  width: 44%;
-  max-width: 540px;
-  height: 100%;
+  width: min(44%, 500px);
+  height: min(52vw, 560px);
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -649,7 +643,7 @@ body.spline-loading header {
 
 .discipline-card--technical {
   --card-color: #b3fd44;
-  top: 23.48%;
+  top: 15%;
   left: 2.9%;
   width: 17.74%;
   aspect-ratio: 283.824 / 397.872;
@@ -671,7 +665,7 @@ body.spline-loading header {
 
 .discipline-card--development {
   --card-color: #6663ff;
-  top: 31.01%;
+  top: 24%;
   left: 21.68%;
   width: 16.04%;
   aspect-ratio: 256.608 / 331.776;
@@ -685,7 +679,7 @@ body.spline-loading header {
 
 .discipline-card--design {
   --card-color: #fdd344;
-  top: 31.01%;
+  top: 24%;
   left: 62.93%;
   width: 16.04%;
   aspect-ratio: 256.608 / 331.776;
@@ -699,7 +693,7 @@ body.spline-loading header {
 
 .discipline-card--programming {
   --card-color: #ff6dfd;
-  top: 21.99%;
+  top: 13.5%;
   left: 79.28%;
   width: 17.74%;
   aspect-ratio: 283.824 / 398.131;

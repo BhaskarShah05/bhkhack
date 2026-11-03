@@ -235,7 +235,7 @@ export default function Home({ activePage = "Home", onNavigate }) {
         data-node-id="1:25"
       >
         <div
-          className="content-stretch flex flex-col gap-24 md:gap-[200px] items-center relative shrink-0 w-full"
+          className="content-stretch flex flex-col gap-12 md:gap-20 items-center relative shrink-0 w-full"
           data-node-id="1:36"
         >
           {/* Main Hero Section matching user design: WHERE CURIOSITY BUILDS THE FUTURE */}
