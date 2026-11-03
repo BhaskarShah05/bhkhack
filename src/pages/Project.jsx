@@ -131,70 +131,8 @@ export default function Project({ activePage = "Project", onNavigate }) {
               We build a tech-driven campus culture by hosting hands-on events and building tools for students and faculty. Our projects help the college community stay updated, sharpen their problem-solving skills, and stay connected.
             </p>
           </div>
-          {/* Mobile 2x4 Grid of Project Cards */}
-          <div className="grid grid-cols-2 gap-3.5 sm:gap-4 w-full max-w-[420px] mx-auto px-1 md:hidden select-none">
-            {allProjects.map((project) => (
-              <a
-                key={project.name}
-                href={project.url || "#"}
-                target={project.url ? "_blank" : "_self"}
-                rel="noreferrer"
-                className="group flex flex-col gap-2.5 items-center w-full cursor-pointer active:scale-95 transition-transform duration-200"
-              >
-                {/* Glass Card Container */}
-                <div className="bg-[rgba(255,255,255,0.15)] backdrop-blur-md h-[215px] sm:h-[235px] overflow-hidden relative rounded-[24px] w-full border border-white/20 transition-all duration-300 group-hover:border-white/40 shadow-lg p-2 flex items-center justify-center">
-                  {/* Frame Vector */}
-                  <div className="absolute inset-2 pointer-events-none">
-                    <img
-                      alt=""
-                      className="size-full object-contain"
-                      src={imgVector}
-                    />
-                  </div>
-                  {/* Inner Image Container */}
-                  <div className="relative w-[82%] h-[60%] border-2 border-white rounded-[6px] overflow-hidden shadow-inner bg-black/40">
-                    <img
-                      alt={project.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      src={project.image}
-                    />
-                  </div>
-                  {/* Mobile View Project Button */}
-                  <div className="absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1 px-2 py-0.5 rounded-[8px] bg-[#212124]/90 border border-white/20 text-white/90 text-[10px] font-medium backdrop-blur-md shadow-md">
-                    <span>View Project</span>
-                    <ExternalLink className="size-2.5 text-white/80" />
-                  </div>
-                </div>
-
-                {/* Title & Tech Badges */}
-                <div className="flex flex-col items-center gap-1 w-full px-1">
-                  <p className="font-['Helvetica_Neue:Regular'] font-bold text-[15px] sm:text-[17px] text-center text-white leading-tight tracking-tight line-clamp-1 group-hover:text-amber-200 transition-colors">
-                    {project.name}
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-1">
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="bg-[rgba(255,255,255,0.2)] px-1.5 py-0.5 rounded-[12px] font-['Helvetica_Neue:Medium'] text-[8px] sm:text-[9px] text-center text-white whitespace-nowrap"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="font-['Helvetica_Neue:Regular'] text-[11px] sm:text-[12px] text-center text-white/70 leading-[1.35] line-clamp-3 px-0.5">
-                  {project.description}
-                </p>
-              </a>
-            ))}
-          </div>
-
-          {/* Desktop View: ProjectCard grid */}
-          <div className="hidden md:flex flex-wrap justify-center gap-x-[60px] gap-y-[60px] items-start relative shrink-0 w-full">
+          {/* Project Showcase Cards Grid matching design (3-3-2 layout on desktop, responsive on tablet/mobile) */}
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-x-10 md:gap-y-12 items-start relative shrink-0 w-full max-w-[1240px] mx-auto px-2">
             {allProjects.map((project) => (
               <ProjectCard
                 key={project.name}
@@ -203,7 +141,6 @@ export default function Project({ activePage = "Project", onNavigate }) {
                 technologies={project.technologies}
                 image={project.image}
                 url={project.url}
-                glowColor="blue"
               />
             ))}
           </div>
