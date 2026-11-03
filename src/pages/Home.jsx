@@ -123,10 +123,95 @@ const eventSlides = eventGalleryItems.map((item) => ({
   linkUrl: item.href,
 }))
 
+const disciplines = [
+  {
+    name: "Technical",
+    className: "discipline-card--technical",
+    icon: publicAsset("assets/2f3ea.svg"),
+  },
+  {
+    name: "Development",
+    className: "discipline-card--development",
+    icon: publicAsset("assets/e0d7f.svg"),
+  },
+  {
+    name: "Design",
+    className: "discipline-card--design",
+    icon: publicAsset("assets/847b0.svg"),
+  },
+  {
+    name: "Programming",
+    className: "discipline-card--programming",
+    icon: publicAsset("assets/17a41.svg"),
+  },
+]
+
+function DisciplineCard({ name, className, icon }) {
+  return (
+    <article className={`discipline-card ${className}`}>
+      <img className="discipline-card__icon" src={icon} alt="" />
+      <p className="discipline-card__label">{name}</p>
+    </article>
+  )
+}
+
 export default function Home({ activePage = "Home", onNavigate }) {
+  const splineRef = useRef(null)
+  const [isSplineLoaded, setIsSplineLoaded] = useState(false)
+
   useEffect(() => {
     document.body.style.overflow = ""
     document.body.classList.remove("spline-loading")
+
+    const viewer = splineRef.current || document.querySelector("spline-viewer")
+
+    const hideWatermark = () => {
+      const v = splineRef.current || document.querySelector("spline-viewer")
+      if (v?.shadowRoot) {
+        let style = v.shadowRoot.querySelector("#hide-spline-logo-style")
+        if (!style) {
+          style = document.createElement("style")
+          style.id = "hide-spline-logo-style"
+          style.textContent = `
+            #logo,
+            #logo *,
+            a[href*="spline.design"],
+            a[href*="spline.design"] *,
+            .spline-watermark,
+            [aria-label*="Spline"] {
+              display: none !important;
+              opacity: 0 !important;
+              visibility: hidden !important;
+              pointer-events: none !important;
+              width: 0 !important;
+              height: 0 !important;
+            }
+          `
+          v.shadowRoot.appendChild(style)
+        }
+      }
+    }
+
+    const onSplineReady = () => {
+      hideWatermark()
+      setIsSplineLoaded(true)
+    }
+
+    if (viewer) {
+      viewer.addEventListener("load-complete", onSplineReady)
+      viewer.addEventListener("loaded", onSplineReady)
+      if (viewer._loaded === true) onSplineReady()
+    }
+
+    hideWatermark()
+    const interval = setInterval(hideWatermark, 100)
+    return () => {
+      clearInterval(interval)
+      if (viewer) {
+        viewer.removeEventListener("load-complete", onSplineReady)
+        viewer.removeEventListener("loaded", onSplineReady)
+      }
+    }
   }, [])
 
   return (
@@ -143,105 +228,77 @@ export default function Home({ activePage = "Home", onNavigate }) {
           className="content-stretch flex flex-col gap-24 md:gap-[200px] items-center relative shrink-0 w-full"
           data-node-id="1:36"
         >
-          {/* Hero Section matching design: Left text + Right 3D mascot */}
-          <div
-            className="relative w-full max-w-[1240px] mx-auto flex flex-col-reverse lg:flex-row items-center justify-between min-h-[calc(100vh-130px)] lg:min-h-[580px] xl:min-h-[660px] py-6 sm:py-8 lg:py-0 gap-8 sm:gap-12 lg:gap-8 overflow-visible"
-            data-node-id="1:37"
-            data-name="Hero Section"
-          >
-            {/* Left Column: Heading, Subtitle & CTA */}
-            <div
-              className="flex flex-col items-start text-left relative z-10 w-full lg:w-[54%] xl:w-[56%] shrink-0"
-              data-node-id="1:39"
-            >
-              <div className="flex flex-col not-italic items-start text-left relative shrink-0 w-full gap-1 sm:gap-2">
-                {/* 1. NIBBLE with Holographic Iridescent Texture */}
-                <h1 className="holographic-foil-text mb-0 font-['Satoshi',Arial,sans-serif] font-black text-[46px] xs:text-[56px] sm:text-[70px] md:text-[82px] lg:text-[92px] xl:text-[102px] leading-[0.98] tracking-[-0.035em] drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)] select-none text-left uppercase">
-                  NIBBLE
-                </h1>
-
-                {/* 2. COMPUTER SOCIETY */}
-                <p className="mb-0 text-[#E0E0E8] font-['Satoshi',Arial,sans-serif] font-black text-[30px] xs:text-[38px] sm:text-[50px] md:text-[58px] lg:text-[66px] xl:text-[74px] leading-[1.02] tracking-[-0.03em] whitespace-nowrap text-left drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)] select-none uppercase">
-                  COMPUTER SOCIETY
-                </p>
-
-                {/* 3. Subtitle Description */}
-                <div className="font-['Playfair_Display',Georgia,serif] italic font-normal text-[15px] xs:text-[17px] sm:text-[19px] md:text-[21px] lg:text-[22px] leading-[1.48] text-[#8E8E98] flex flex-col gap-0.5 sm:gap-1 mt-4 sm:mt-5 text-left select-none max-w-[620px]">
-                  <p className="mb-0">A community driven by curiosity, creativity, and innovation.</p>
-                  <p className="mb-0">Turning bold ideas into technology that shapes tomorrow.</p>
-                </div>
-              </div>
-
-              {/* 4. Join the Community Pill Button */}
-              <div className="pt-7 sm:pt-9 md:pt-11 flex justify-start w-full">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    const clubsEl = document.getElementById("clubs-section")
-                    if (clubsEl) {
-                      clubsEl.scrollIntoView({ behavior: "smooth" })
-                    } else {
-                      window.scrollTo({
-                        top: window.innerHeight * 0.9,
-                        behavior: "smooth",
-                      })
-                    }
-                  }}
-                  className="group relative inline-flex items-center justify-center p-[1.5px] rounded-full overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] hover:shadow-[0_0_30px_rgba(255,255,255,0.18)] cursor-pointer"
-                >
-                  {/* Subtle luminous metallic border */}
-                  <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/35 via-white/15 to-white/35 group-hover:from-white/60 group-hover:to-white/50 transition-all duration-300" />
-                  {/* Translucent dark glass core */}
-                  <span className="relative z-10 px-8 py-3.5 sm:px-9 sm:py-4 rounded-full bg-[#0a0a0d]/80 group-hover:bg-[#121216]/85 backdrop-blur-xl flex items-center justify-center transition-all duration-300">
-                    <span className="font-['Satoshi',Arial,sans-serif] font-medium text-[15px] sm:text-[17px] text-[#EDEDF2] group-hover:text-white tracking-wide">
-                      Join the Community
-                    </span>
-                  </span>
-                </motion.button>
-              </div>
-            </div>
-
-            {/* Right Column: 3D Robot Mascot */}
-            <div
-              className="relative z-10 w-full lg:w-[46%] xl:w-[44%] flex flex-col items-center justify-center select-none pointer-events-none mb-4 lg:mb-0"
-              data-node-id="1:38"
-              data-name="Hero 3D Mascot"
-            >
-              <motion.div
-                animate={{
-                  y: [0, -18, 2, -10, 0],
-                  x: [0, 5, -4, 3, 0],
-                  rotate: [0, 1.8, -1.2, 0.8, 0],
+          {/* Main Hero Section matching user design: WHERE CURIOSITY BUILDS THE FUTURE */}
+          <div className="hero-custom w-full" data-name="Hero Section">
+            <section className="hero__intro" aria-labelledby="hero-title">
+              <p className="hero__eyebrow">NIBBLE COMPUTER SOCIETY</p>
+              <h1 id="hero-title" className="hero__title">
+                <span>WHERE CURIOSITY</span>
+                <span>BUILDS THE FUTURE</span>
+              </h1>
+              <p className="hero__description">
+                <span>
+                  A community of builders, designers, developers and problem solvers
+                </span>
+                <span>turning bold ideas into technology</span>
+              </p>
+              <a
+                className="hero__cta cursor-pointer"
+                href="#disciplines"
+                onClick={(e) => {
+                  e.preventDefault()
+                  const el = document.getElementById("disciplines") || document.getElementById("clubs-section")
+                  if (el) el.scrollIntoView({ behavior: "smooth" })
                 }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="relative w-full max-w-[280px] xs:max-w-[340px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[540px] xl:max-w-[600px] flex items-center justify-center"
               >
-                <img
-                  src={imgRobot3D}
-                  alt="Nibble Computer Society Mascot"
-                  className="w-full h-auto object-contain filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)]"
-                  loading="eager"
-                />
-              </motion.div>
-              {/* Dynamic floating shadow beneath */}
-              <motion.div
-                animate={{
-                  scaleX: [1, 0.82, 1.06, 0.88, 1],
-                  opacity: [0.55, 0.25, 0.6, 0.3, 0.55],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="w-44 sm:w-64 md:w-80 h-3 rounded-full bg-black/80 blur-[8px] -mt-2 sm:-mt-4 pointer-events-none"
-              />
-            </div>
+                <span>Explore NCS</span>
+                <img src={publicAsset("assets/7894a.svg")} alt="" />
+              </a>
+            </section>
+
+            <section
+              id="disciplines"
+              className="hero__visual"
+              aria-label="NCS disciplines"
+            >
+              {disciplines.map((discipline) => (
+                <DisciplineCard key={discipline.name} {...discipline} />
+              ))}
+
+              {/* Center Robot with Spline 3D interaction + Framer Motion float */}
+              <div className="hero__robot">
+                <motion.div
+                  animate={{
+                    y: [0, -14, 2, -10, 0],
+                    x: [0, 4, -3, 2, 0],
+                    rotate: [0, 1.8, -1.2, 0.8, 0],
+                  }}
+                  transition={{
+                    duration: 5.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="relative w-full h-full flex items-center justify-center pointer-events-auto"
+                >
+                  {/* Interactive 3D Spline viewer */}
+                  <spline-viewer
+                    ref={splineRef}
+                    url="https://prod.spline.design/uf2wIxgO0yhwMjDR/scene.splinecode"
+                    className={`w-full h-full block transition-opacity duration-500 ${isSplineLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    style={{ width: "100%", height: "100%", pointerEvents: "auto" }}
+                  ></spline-viewer>
+
+                  {/* Immediate fallback image before Spline loads or on devices */}
+                  {!isSplineLoaded && (
+                    <img
+                      className="absolute inset-0 w-full h-full object-contain pointer-events-none filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.85)]"
+                      src={imgRobot3D}
+                      alt="A friendly Nibble Computer Society robot"
+                    />
+                  )}
+                </motion.div>
+              </div>
+            </section>
           </div>
 
           <div
