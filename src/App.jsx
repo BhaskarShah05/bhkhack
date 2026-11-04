@@ -17,6 +17,7 @@ const Contact = lazy(() => import("./pages/Contact"))
 const CardFanCarouselDemo = lazy(() => import("./components/ui/card-fan-carousel-demo"))
 
 import { preloadRoute } from "./lib/preloadRoute"
+import { initGlobalSoundListeners, playSfx } from "./lib/soundFx"
 
 export default function App() {
   const location = useLocation()
@@ -39,6 +40,21 @@ export default function App() {
   const [contentHeight, setContentHeight] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const innerRef = useRef(null)
+  const isInitialMount = useRef(true)
+
+  // Initialize global SFX engine listeners
+  useEffect(() => {
+    initGlobalSoundListeners()
+  }, [])
+
+  // Play subtle sci-fi chord chime on page navigation transitions
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+    playSfx("pageTransition")
+  }, [location.pathname])
 
   // Instantly scroll to top on page navigation and ensure scroll is unlocked
   useEffect(() => {

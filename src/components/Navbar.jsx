@@ -13,6 +13,8 @@ import {
 } from "lucide-react"
 import { publicAsset } from "../lib/publicAsset"
 import { preloadRoute } from "../lib/preloadRoute"
+import { playSfx } from "../lib/soundFx"
+import SoundToggle from "./SoundToggle"
 
 const imgNcsLogo = publicAsset("assets/ncs-logo-white.svg")
 
@@ -57,6 +59,7 @@ export default function Navbar() {
   const activePage = getPageFromPath(optimisticPath || location.pathname)
 
   const onNavigate = (path) => {
+    playSfx("nav")
     if (location.pathname === path && optimisticPath === path) {
       window.scrollTo({ top: 0, behavior: "instant" })
       setIsMobileOpen(false)
@@ -77,7 +80,14 @@ export default function Navbar() {
   }
 
   const handleContactClick = () => {
+    playSfx("click")
     onNavigate("/contact")
+  }
+
+  const toggleMobileMenu = () => {
+    const nextState = !isMobileOpen
+    setIsMobileOpen(nextState)
+    playSfx(nextState ? "modalOpen" : "modalClose")
   }
 
   return (
@@ -174,78 +184,82 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Right: Liquid Glass CTA Button ("Contact Us") */}
-            <div className="hidden sm:flex items-center">
-              <motion.button
-                type="button"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onMouseEnter={() => {
-                  setIsCtaHovered(true)
-                  preloadRoute("/contact")
-                }}
-                onMouseLeave={() => setIsCtaHovered(false)}
-                onClick={handleContactClick}
-                className={`relative overflow-hidden cursor-pointer flex items-center justify-center px-5 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-[14px] font-['Satoshi',Arial,sans-serif] font-semibold text-white tracking-[0.3px] transition-all focus:outline-none ${
-                  activePage === "Contact"
-                    ? "ring-2 ring-white/50 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                    : ""
-                }`}
-                style={{
-                  background:
-                    activePage === "Contact"
-                      ? "linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%)"
-                      : "linear-gradient(180deg, rgb(38, 38, 44) 0%, rgb(10, 10, 14) 100%)",
-                  boxShadow:
-                    "inset 0px 1px 0px 0px rgba(255, 255, 255, 0.35), inset 0px -1px 1px 0px rgba(0, 0, 0, 0.6), 0px 6px 16px -4px rgba(0, 0, 0, 0.6)",
-                  border: activePage === "Contact" ? "1px solid rgba(255, 255, 255, 0.45)" : "1px solid rgba(255, 255, 255, 0.18)",
-                }}
-              >
-                {/* Diagonal Hover Light Shine Beam */}
-                <motion.div
-                  initial={{ x: "-100%", opacity: 0 }}
-                  animate={{
-                    x: isCtaHovered ? "150%" : "-100%",
-                    opacity: isCtaHovered ? 1 : 0,
+            {/* Right: Sound Toggle + Liquid Glass CTA Button ("Contact Us") */}
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <SoundToggle compact={true} />
+
+              <div className="hidden sm:flex items-center">
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onMouseEnter={() => {
+                    setIsCtaHovered(true)
+                    preloadRoute("/contact")
                   }}
-                  transition={{ duration: 0.75, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="absolute inset-y-0 w-[45px] pointer-events-none -skew-x-20"
+                  onMouseLeave={() => setIsCtaHovered(false)}
+                  onClick={handleContactClick}
+                  className={`relative overflow-hidden cursor-pointer flex items-center justify-center px-5 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-[14px] font-['Satoshi',Arial,sans-serif] font-semibold text-white tracking-[0.3px] transition-all focus:outline-none ${
+                    activePage === "Contact"
+                      ? "ring-2 ring-white/50 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                      : ""
+                  }`}
                   style={{
                     background:
-                      "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%)",
+                      activePage === "Contact"
+                        ? "linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%)"
+                        : "linear-gradient(180deg, rgb(38, 38, 44) 0%, rgb(10, 10, 14) 100%)",
+                    boxShadow:
+                      "inset 0px 1px 0px 0px rgba(255, 255, 255, 0.35), inset 0px -1px 1px 0px rgba(0, 0, 0, 0.6), 0px 6px 16px -4px rgba(0, 0, 0, 0.6)",
+                    border: activePage === "Contact" ? "1px solid rgba(255, 255, 255, 0.45)" : "1px solid rgba(255, 255, 255, 0.18)",
                   }}
-                />
-                <span className="relative z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Contact Us
-                </span>
-              </motion.button>
-            </div>
-
-            {/* Mobile Animated Menu Hamburger (3 lines) / Close Toggle */}
-            <button
-              type="button"
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="flex lg:hidden relative size-9 sm:size-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/15 active:scale-95 border border-white/20 text-white transition-all cursor-pointer focus:outline-none"
-              aria-label="Toggle mobile menu"
-            >
-              <div className="relative w-4 h-3.5 flex flex-col justify-between items-center pointer-events-none">
-                <span
-                  className={`w-4 h-[1.8px] bg-white rounded-full transition-transform duration-100 ease-out origin-center ${
-                    isMobileOpen ? "rotate-45 translate-y-[5.8px]" : ""
-                  }`}
-                />
-                <span
-                  className={`w-4 h-[1.8px] bg-white rounded-full transition-opacity duration-75 ease-out ${
-                    isMobileOpen ? "opacity-0" : "opacity-100"
-                  }`}
-                />
-                <span
-                  className={`w-4 h-[1.8px] bg-white rounded-full transition-transform duration-100 ease-out origin-center ${
-                    isMobileOpen ? "-rotate-45 -translate-y-[5.8px]" : ""
-                  }`}
-                />
+                >
+                  {/* Diagonal Hover Light Shine Beam */}
+                  <motion.div
+                    initial={{ x: "-100%", opacity: 0 }}
+                    animate={{
+                      x: isCtaHovered ? "150%" : "-100%",
+                      opacity: isCtaHovered ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.75, ease: [0.25, 0.1, 0.25, 1] }}
+                    className="absolute inset-y-0 w-[45px] pointer-events-none -skew-x-20"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%)",
+                    }}
+                  />
+                  <span className="relative z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                    Contact Us
+                  </span>
+                </motion.button>
               </div>
-            </button>
+
+              {/* Mobile Animated Menu Hamburger (3 lines) / Close Toggle */}
+              <button
+                type="button"
+                onClick={toggleMobileMenu}
+                className="flex lg:hidden relative size-9 sm:size-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/15 active:scale-95 border border-white/20 text-white transition-all cursor-pointer focus:outline-none"
+                aria-label="Toggle mobile menu"
+              >
+                <div className="relative w-4 h-3.5 flex flex-col justify-between items-center pointer-events-none">
+                  <span
+                    className={`w-4 h-[1.8px] bg-white rounded-full transition-transform duration-100 ease-out origin-center ${
+                      isMobileOpen ? "rotate-45 translate-y-[5.8px]" : ""
+                    }`}
+                  />
+                  <span
+                    className={`w-4 h-[1.8px] bg-white rounded-full transition-opacity duration-75 ease-out ${
+                      isMobileOpen ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                  <span
+                    className={`w-4 h-[1.8px] bg-white rounded-full transition-transform duration-100 ease-out origin-center ${
+                      isMobileOpen ? "-rotate-45 -translate-y-[5.8px]" : ""
+                    }`}
+                  />
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* Mobile Accordion Drawer */}
@@ -289,6 +303,14 @@ export default function Navbar() {
                 >
                   Contact Us
                 </button>
+
+                {/* Mobile Sound Settings Row */}
+                <div className="flex items-center justify-between px-3 py-2.5 mt-2 border-t border-white/10 rounded-2xl bg-white/[0.04]">
+                  <span className="text-[13.5px] text-white/80 font-['Satoshi',Arial,sans-serif] font-medium">
+                    Sound Effects (SFX)
+                  </span>
+                  <SoundToggle compact={false} />
+                </div>
               </div>
             </div>
           </div>

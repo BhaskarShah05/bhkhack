@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import Footer from "../components/Footer"
+import { playSfx } from "../lib/soundFx"
 
 function SocialSvg({ type }) {
   if (type === "github") {
@@ -56,6 +57,7 @@ export default function Contact({ activePage = "Contact", onNavigate }) {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("ncs.jssaten@gmail.com")
     setCopiedEmail(true)
+    playSfx("success")
     setTimeout(() => setCopiedEmail(false), 2000)
   }
 

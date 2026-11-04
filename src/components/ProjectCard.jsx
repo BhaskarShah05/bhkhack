@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { playSfx } from "../lib/soundFx";
 
 /**
  * ProjectCard — exact original visual design from commit e44b3cc
@@ -112,6 +113,7 @@ export function ProjectCard({
   // ── 3D tilt animation logic from InteractiveTravelCard ─────────────────
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const hasTriggeredTiltSfx = useRef(false);
 
   const springConfig = { damping: 15, stiffness: 150 };
   const springX = useSpring(mouseX, springConfig);
@@ -121,6 +123,10 @@ export function ProjectCard({
   const rotateY = useTransform(springX, [-0.5, 0.5], ["-10.5deg", "10.5deg"]);
 
   const handleMouseMove = (e) => {
+    if (!hasTriggeredTiltSfx.current) {
+      hasTriggeredTiltSfx.current = true;
+      playSfx("cardTilt");
+    }
     const rect = e.currentTarget.getBoundingClientRect();
     const { width, height, left, top } = rect;
     const mouseXVal = e.clientX - left;
@@ -132,6 +138,7 @@ export function ProjectCard({
   };
 
   const handleMouseLeave = () => {
+    hasTriggeredTiltSfx.current = false;
     mouseX.set(0);
     mouseY.set(0);
   };
